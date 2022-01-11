@@ -1,0 +1,14 @@
+.chatPreview {
+    height: 130px;
+    display: flex;
+    flex-direction: row;
+}
+
+.profilePicture {
+    width: 100px;
+    height: 100px;
+    min-width: 100px;
+    background-color: #AB8FA7;
+    border: none;
+    border-radius: 15px;
+}

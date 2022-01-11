@@ -1,0 +1,12 @@
+.stackpanel {
+    display: flex;
+}
+
+.stackpanel.column {
+    flex-direction: column;
+}
+
+.stackpanel.row {
+    flex-direction: row;
+}
+

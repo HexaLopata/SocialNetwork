@@ -1,0 +1,9 @@
+.post {
+    padding: 5px 15px;
+}
+
+.postImage {
+    width: 50%;
+    display: block;
+    margin: 20px auto;
+}

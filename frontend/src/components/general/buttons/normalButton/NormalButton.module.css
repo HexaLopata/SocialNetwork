@@ -1,0 +1,16 @@
+.normalButton {
+    display: flex;
+    color: #F7F6F7;
+    background-color: #43264D;
+    border-radius: 15px;
+    height: 35px;
+    width: min-content;
+    align-items: center;
+    justify-content: center;
+    padding: 5px 20px;
+    transition: all 0.2s ease-in;
+}
+
+.normalButton:hover {
+    background-color: #AB8FA7;
+}

@@ -1,0 +1,17 @@
+.personalInfo {
+    height: 200px;
+    width: 100%;
+    padding: 15px;
+    margin: 0 0 0 20px;
+    background-color: #F7F6F7;
+    border-radius: 15px;
+}
+
+.profilePicture {
+    width: 200px;
+    height: 200px;
+    min-width: 200px;
+    background-color: #AB8FA7;
+    border: none;
+    border-radius: 15px;
+}
