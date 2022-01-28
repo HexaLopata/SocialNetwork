@@ -11,6 +11,6 @@ export const routes = [
     { path: '/news', permission: 'Authorized', element: NewsPage },
     { path: '/messages', permission: 'Authorized', element: MessagesPage },
     { path: '/profile/:id', permission: 'Any', element: ProfilePage },
-    { path: '/editProfile/', permission: 'Any', element: EditProfilePage },
-    { path: '/chat/:id', permission: 'Any', element: ChatPage },
+    { path: '/editProfile', permission: 'Authorized', element: EditProfilePage },
+    { path: '/chat/:id', permission: 'Authorized', element: ChatPage },
 ]
