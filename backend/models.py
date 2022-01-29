@@ -15,6 +15,7 @@ class Account(models.Model):
     birthdate = models.DateField()
     profile_picture = models.ImageField(upload_to='static/images/%Y/%m/%d/', blank=True)
     background_picture = models.ImageField(upload_to='static/images/%Y/%m/%d/', blank=True)
+    friends = models.ManyToManyField('Account')
     chats = models.ManyToManyField(Chat)
 
     def delete(self, *args, **kwargs):
@@ -28,7 +29,7 @@ class Account(models.Model):
 class Post(models.Model):
     author = models.ForeignKey(Account, on_delete=models.CASCADE, related_name='author')
     date = models.DateField(auto_now=True)
-    image = models.ImageField(upload_to='static/images/%Y/%m/%d/')
+    image = models.ImageField(upload_to='static/images/%Y/%m/%d/', blank=True)
     body = models.TextField()
     likes = models.ManyToManyField(Account)
 

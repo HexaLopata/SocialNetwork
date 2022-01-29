@@ -1,9 +1,14 @@
 from rest_framework import serializers
-from django.contrib.auth.models import User
+
+from backend.models import Account, Post
 
 
-class UserSerializer(serializers.ModelSerializer):
+class AccountSerializer(serializers.ModelSerializer):
     class Meta:
-        model = User
-        fields = ['username']
+        model = Account
+        fields = ['first_name', 'last_name', 'birthdate', 'profile_picture', 'background_picture']
 
+class PostSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Post
+        fields = ['id', 'author', 'body', 'image', 'date']

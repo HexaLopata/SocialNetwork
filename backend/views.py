@@ -1,14 +1,32 @@
+from django.forms import ValidationError
 from rest_framework.views import APIView
-from rest_framework import permissions
+from rest_framework import permissions, generics
 from rest_framework.response import Response
 from django.contrib.auth.models import User
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import ensure_csrf_cookie, csrf_protect
-from .decorators import try_except_decorator
 from django.contrib.auth import authenticate, login, logout
-import re
 
-from backend.models import Account
+from backend.decorators import try_except_decorator
+from backend.models import Account, Post
+from backend.serializers import AccountSerializer, PostSerializer
+from backend.validators import validate_date
+from backend.permissions import IsOwner
+
+# Authorization
+
+
+class DeleteUserView(APIView):
+
+    @try_except_decorator()
+    def delete(self, *args, **kwargs):
+        user = self.request.user
+        data = self.request.data
+
+        if user.check_password(data['password']):
+            user.delete()
+            return Response({'success': 'User deleted successfully'}, status=200)
+        return Response({'error': 'Invalid password'}, status=400)
 
 
 @method_decorator(csrf_protect, name='dispatch')
@@ -33,11 +51,10 @@ class SignupView(APIView):
         if len(password) < 8:
             return Response({'error': 'Password must be at least 8 characters'}, status=400)
 
-        if not re.match(r'[0-9]{4}-[0-9]{2}-[0-9]{2}', birthdate):
-            return Response({'error': 'Date must be in YYYY-MM-DD format'}, status=400)
-        date_fields = birthdate.split('-')
-        if int(date_fields[1]) > 12 or int(date_fields[2]) > 31:
-            return Response({'error': 'Date must be in YYYY-MM-DD format'}, status=400)
+        try:
+            validate_date(birthdate)
+        except ValidationError:
+            return Response({'error': 'Incorrect data format, should be YYYY-MM-DD'}, status=400)
 
         user = User.objects.create_user(username=username, password=password)
         account = Account(user=user, first_name=first_name,
@@ -93,3 +110,40 @@ class CSRFTokenView(APIView):
     @try_except_decorator(error_message='Something went wrong', status=500)
     def get(self, *args, **kwargs):
         return Response({'success': 'CSRF cookie set'}, status=200)
+
+
+class CurrentAccountView(APIView):
+    @try_except_decorator(error_message='Something went wrong', status=500)
+    def get(self, *args, **kwargs):
+        user = self.request.user
+        account_serializer = AccountSerializer(user.account)
+        return Response(account_serializer.data)
+
+    @try_except_decorator(error_message='Something went wrong', status=500)
+    def patch(self, *args, **kwargs):
+        data = self.request.data
+        account = self.request.user.account
+        birthdate = data.get('birthdate')
+        if birthdate is not None:
+            try:
+                validate_date(birthdate)
+            except ValidationError:
+                return Response({'error': 'Incorrect date format, should be YYYY-MM-DD'}, status=400)
+
+        for attr in data.keys():
+            if hasattr(account, attr):
+                setattr(account, attr, data[attr])
+        account.save()
+        return Response({'success': 'Account updated successfully'}, status=200)
+
+# Models
+class PostView(generics.ListCreateAPIView):
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
+    pass
+
+class PostDeleteView(generics.DestroyAPIView):
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
+    permission_classes = [IsOwner]
+
