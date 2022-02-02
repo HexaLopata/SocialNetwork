@@ -9,8 +9,8 @@ urlpatterns = [
     path('login/', LoginView.as_view()),
     path('logout/', LogoutView.as_view()),
     path('user/', DeleteUserView.as_view()),
-    path('current-account/', CurrentAccountView.as_view()),
-    path('posts/', PostView.as_view()), # TODO autoauthor
+    path('account/current/', CurrentAccountView.as_view()),
+    path('posts/', PostView.as_view()),
     path('posts/<int:pk>/', PostDeleteView.as_view()),
     # TODO
     # path('chats/', ) get/post
@@ -18,8 +18,9 @@ urlpatterns = [
     # path('chats/<int:pk>/'messages/', ) get
     # path('messages/<int:pk>/', ) patch/delete
     # path('messages/', ) get/post
-    # path('account/<int:pk>/friends/', ) get/post
-    # path('account/<int:pk>/posts/', ) get
+    path('account/current/friends/', CurrentAccountFriendsView.as_view()),
+    path('account/<int:pk>/friends/', AccountFriendsView.as_view()),
+    path('account/<int:pk>/posts/', AccountPostsView.as_view())
     # path('account'/<int:pk>/chats/) get
     # path('account/<int:pk>/friends/posts/', ) get
 ]

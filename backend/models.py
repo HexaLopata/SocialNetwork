@@ -1,3 +1,4 @@
+from enum import unique
 from pyexpat import model
 from django.utils.timezone import now
 from django.db import models
@@ -27,7 +28,7 @@ class Account(models.Model):
         return self.first_name
 
 class Post(models.Model):
-    author = models.ForeignKey(Account, on_delete=models.CASCADE, related_name='author')
+    author = models.ForeignKey(Account, on_delete=models.CASCADE, related_name='posts')
     date = models.DateField(auto_now=True)
     image = models.ImageField(upload_to='static/images/%Y/%m/%d/', blank=True)
     body = models.TextField()
@@ -39,3 +40,8 @@ class Message(models.Model):
     body = models.TextField()
     image = models.ImageField(upload_to='static/images/%Y/%m/%d/', blank=True)
     chat = models.ForeignKey(Chat, on_delete=models.CASCADE)
+
+ 
+class Request(models.Model):
+    from_account = models.ForeignKey(Account, on_delete=models.CASCADE, related_name='friend_requests')
+    to_account = models.ForeignKey(Account, on_delete=models.CASCADE, related_name='requests_to_me')

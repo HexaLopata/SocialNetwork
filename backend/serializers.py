@@ -6,7 +6,7 @@ from backend.models import Account, Post
 class AccountSerializer(serializers.ModelSerializer):
     class Meta:
         model = Account
-        fields = ['first_name', 'last_name', 'birthdate', 'profile_picture', 'background_picture']
+        fields = ['id', 'first_name', 'last_name', 'birthdate', 'profile_picture', 'background_picture']
 
 class PostSerializer(serializers.ModelSerializer):
     class Meta:
