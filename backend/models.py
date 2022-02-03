@@ -1,5 +1,3 @@
-from enum import unique
-from pyexpat import model
 from django.utils.timezone import now
 from django.db import models
 from django.contrib.auth.models import User

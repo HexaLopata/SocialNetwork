@@ -7,17 +7,17 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import ensure_csrf_cookie, csrf_protect
 from django.contrib.auth import authenticate, login, logout
 from django.core.exceptions import ObjectDoesNotExist
+from django.db.models import Subquery
 
 from backend.decorators import try_except_decorator
 from backend.models import Account, Post
-from backend.serializers import AccountSerializer, PostSerializer
+from backend.serializers import *
 from backend.validators import validate_date
 from backend.permissions import IsOwner
 # Authorization
 
 
 class DeleteUserView(APIView):
-
     @try_except_decorator()
     def delete(self, *args, **kwargs):
         user = self.request.user
@@ -112,6 +112,9 @@ class CSRFTokenView(APIView):
         return Response({'success': 'CSRF cookie set'}, status=200)
 
 
+# Models
+
+
 class CurrentAccountView(APIView):
     @try_except_decorator(error_message='Something went wrong', status=500)
     def get(self, *args, **kwargs):
@@ -136,7 +139,17 @@ class CurrentAccountView(APIView):
         account.save()
         return Response({'success': 'Account updated successfully'}, status=200)
 
-# Models
+
+class AccountView(generics.RetrieveAPIView):
+    queryset = Account.objects.all()
+    serializer_class = AccountSerializer
+    permission_classes = [permissions.AllowAny]
+
+
+class AccountsView(generics.ListAPIView):
+    queryset = Account.objects.all()
+    serializer_class = AccountSerializer
+    permission_classes = [permissions.AllowAny]
 
 
 class PostView(generics.ListCreateAPIView):
@@ -163,6 +176,13 @@ class AccountPostsView(generics.GenericAPIView):
         account = self.get_object()
         serializer = PostSerializer(account.posts, many=True)
         return Response(serializer.data)
+
+class CurrentAccountPostsView(APIView):
+    @try_except_decorator(error_message='Something went wrong', status=500)
+    def get(self, request, *args, **kwargs):
+        account = Account.objects.get(user=self.request.user)
+        serializer = PostSerializer(account.posts, many=True)
+        return Response(serializer.data) 
 
 
 class AccountFriendsView(generics.GenericAPIView):
@@ -191,11 +211,11 @@ class CurrentAccountFriendsView(APIView):
 
         if account.id == friend.id:
             return Response({'error': 'You can`t send a request to yourself'}, status=400)
-            
+
         already_friends = friend.friends.filter(id=account.id).first() is not None
         if already_friends:
             return Response({'error': 'You are already friends'}, status=400)
-            
+
         mutual_request = friend.friend_requests.filter(to_account=account).first()
         if mutual_request is not None:
             friend.friend_requests.filter(id=mutual_request.id).delete()
@@ -206,7 +226,7 @@ class CurrentAccountFriendsView(APIView):
             if account.friend_requests.filter(to_account=friend).first() is not None:
                 return Response({'error': 'You have already sent a request to this user'}, status=400)
 
-            account.friend_requests.create(from_account=account, to_account=friend)
+            account.friend_requests.create( from_account=account, to_account=friend)
             return Response({'success': 'Your request has been sent'}, status=200)
 
     @try_except_decorator(error_message='Something went wrong', status=500)
@@ -224,3 +244,10 @@ class CurrentAccountFriendsView(APIView):
         account.friends.remove(friend)
         friend.friends.remove(account)
         return Response({'success': 'You aren`t friends now'}, status=200)
+
+class FriendsPostsView(APIView):
+    @try_except_decorator(error_message='Something went wrong', status=500)
+    def get(self, *args, **kwargs):
+        account = Account.objects.get(user=self.request.user)
+        posts = Post.objects.filter(author_id__in=Subquery(account.friends.values('id'))).select_related('author')
+        return Response(PostWithAuthorSerializer(posts, many=True).data)
