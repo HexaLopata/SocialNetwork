@@ -41,7 +41,10 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django_cleanup.apps.CleanupConfig',
     'rest_framework',
-    'backend',
+    'session_auth',
+    'account',
+    'chat',
+    'posts',
     'frontend'
 ]
 
