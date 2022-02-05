@@ -1,3 +1,4 @@
+from django.http import HttpResponse
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import permissions
@@ -6,9 +7,10 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_protect, ensure_csrf_cookie
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
+from account.serializers import AccountSerializer
 from helpers.decorators import try_except_decorator
-from helpers.validators import validate_date
 from account.models import Account
+from session_auth.serializers import UserSerializer
 
 
 @method_decorator(csrf_protect, name='dispatch')
@@ -19,44 +21,32 @@ class SignupView(APIView):
     Input data:
     username: str
     password: str
-    re_password: str
     first_name: str
     last_name: str
     birthdate: date in YYYY-MM-DD format\n
-    Output:\n
-    success: {'success': 'Account was created successfully'}\n
-    error: {'error': 'Error info'}
     """
     permission_classes = [permissions.AllowAny]
 
     @try_except_decorator()
     def post(self, *args, **kwargs):
         data = self.request.data
+        
+        user_serializer = UserSerializer(data={
+            'username' : data.pop('username', None),
+            'password' : data.pop('password', None)
+        })
 
-        username = data['username']
-        password = data['password']
-        first_name = data['first_name']
-        last_name = data['last_name']
-        birthdate = data['birthdate']
-        re_password = data['re_password']
-
-        if password != re_password:
-            return Response({'error': 'passwords do not match'}, status=400)
-        if User.objects.filter(username=username).exists():
-            return Response({'error': 'User already exists'}, status=400)
-        if len(password) < 8:
-            return Response({'error': 'Password must be at least 8 characters'}, status=400)
-
-        try:
-            validate_date(birthdate)
-        except ValidationError:
-            return Response({'error': 'Incorrect date format, should be YYYY-MM-DD'}, status=400)
-
-        user = User.objects.create_user(username=username, password=password)
-        account = Account(user=user, first_name=first_name,
-                          last_name=last_name, birthdate=birthdate)
-        account.save()
-        return Response({'success': 'Account was created successfully'}, status=201)
+        if user_serializer.is_valid():
+            account_serializer = AccountSerializer(data=data)
+            if account_serializer.is_valid():
+                user = user_serializer.save()
+                account_serializer.save(user=user)
+            else:
+                return Response(account_serializer.errors, status=400)
+        else:
+            return Response(user_serializer.errors, status=400)
+                        
+        return Response(account_serializer.data, status=201)
 
 
 class DeleteUserView(APIView):
@@ -64,9 +54,6 @@ class DeleteUserView(APIView):
     Accepts DELETE request with password and deletes your account if the password is correct.\n
     Input data:
     password: str\n
-    Output:\n
-    success: {'success': 'User deleted successfully'}\n
-    error: {'error': 'Invalid password'}
     """
     @try_except_decorator()
     def delete(self, *args, **kwargs):
@@ -75,8 +62,8 @@ class DeleteUserView(APIView):
 
         if user.check_password(data['password']):
             user.delete()
-            return Response({'success': 'User deleted successfully'}, status=200)
-        return Response({'error': 'Invalid password'}, status=400)
+            return Response(status=204)
+        return Response({'password': ['Invalid password']}, status=400)
 
 
 @method_decorator(csrf_protect, name='dispatch')
@@ -92,9 +79,9 @@ class IsAuthenticatedView(APIView):
     @try_except_decorator()
     def get(self, *args, **kwargs):
         if self.request.user.is_authenticated:
-            return Response({'isAuthenticated': 'true'}, status=200)
+            return Response({'isAuthenticated': True}, status=200)
         else:
-            return Response({'isAuthenticated': 'false'}, status=200)
+            return Response({'isAuthenticated': False}, status=200)
 
 
 @method_decorator(csrf_protect, name='dispatch')
@@ -103,10 +90,7 @@ class LoginView(APIView):
     Accepts POST request with username and password and tells if you are authenticated.\n
     Input data:
     username: str
-    password: str\n
-    Output:\n
-    success: {'success': 'Login was successful'}\n
-    error: {'error': 'Invalid username or password'}
+    password: str
     """
     permission_classes = [permissions.AllowAny]
 
@@ -121,7 +105,7 @@ class LoginView(APIView):
 
         if user is not None:
             login(self.request, user)
-            return Response({'success': 'Login was successful'}, status=200)
+            return Response(status=204)
         else:
             return Response({'error': 'Invalid username or password'}, status=400)
 
@@ -129,14 +113,11 @@ class LoginView(APIView):
 class LogoutView(APIView):
     """
     Accepts POST request and logs out.\n
-    Output:\n
-    success: {"success": "Logout was successful"}\n
-    error: {"error": "Something went wrong"}
     """
     @try_except_decorator()
     def post(self, *args, **kwargs):
         logout(self.request)
-        return Response({"success": "Logout was successful"}, status=200)
+        return Response(status=204)
 
 
 @method_decorator(ensure_csrf_cookie, name='dispatch')
@@ -151,4 +132,4 @@ class CSRFTokenView(APIView):
 
     @try_except_decorator()
     def get(self, *args, **kwargs):
-        return Response({'success': 'CSRF cookie set'}, status=200)
+        return Response(status=204)

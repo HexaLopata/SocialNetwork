@@ -1,12 +1,14 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import generics, permissions
-from django.forms import ValidationError
+from django.core.exceptions import ObjectDoesNotExist
+
+from .services import AccountService
 from .models import Account
 from .serializers import AccountSerializer
-from helpers.validators import validate_date
 from helpers.decorators import try_except_decorator
 
+account_service = AccountService()
 
 class CurrentAccountView(APIView):
     """ 
@@ -17,32 +19,23 @@ class CurrentAccountView(APIView):
     birthdate: date in YYYY-MM-DD format !optional
     profile_picture: str !optional
     background_picture: str !optional\n
-    PATCH Output:\n
-    success: {'success': 'Account updated successfully'}\n
-    error: {'error': 'Error info'}
     """
     @try_except_decorator()
     def get(self, *args, **kwargs):
-        user = self.request.user
-        account_serializer = AccountSerializer(user.account)
+        account = account_service.get_current_account(self.request)
+        account_serializer = AccountSerializer(account)
         return Response(account_serializer.data)
 
     @try_except_decorator()
     def patch(self, *args, **kwargs):
         data = self.request.data
-        account = self.request.user.account
-        birthdate = data.get('birthdate')
-        if birthdate is not None:
-            try:
-                validate_date(birthdate)
-            except ValidationError:
-                return Response({'error': 'Incorrect date format, should be YYYY-MM-DD'}, status=400)
-
-        for attr in data.keys():
-            if hasattr(account, attr) and (attr != 'id') and (attr != 'user'):
-                setattr(account, attr, data[attr])
-        account.save()
-        return Response({'success': 'Account updated successfully'}, status=200)
+        account = account_service.get_current_account(self.request)
+        serializer = AccountSerializer(instance=account, data=data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(status=204)
+        else:
+            return Response(serializer.errors, status=400)
 
 
 class AccountView(generics.RetrieveAPIView):
@@ -79,58 +72,39 @@ class CurrentAccountFriendsView(APIView):
     """ 
     Accepts GET, POST and DELETE requests for list, add and delete friends.\n
     DELETE and POST input data:
-    friend_account: int\n
-    DELETE/POST output:\n
-    success: POST: {'success': 'Your request has been sent'} or {'success': 'You are friends now'}\n
-    DELETE: {'success': 'You aren\`t friends now'}\n
-    error: {'error': 'Error info'}
+    friend_account: int
     """
     @try_except_decorator()
     def get(self, *args, **kwargs):
-        account = Account.objects.get(user=self.request.user)
+        account = account_service.get_current_account(self.request)
         return Response(AccountSerializer(account.friends, many=True).data)
 
     @try_except_decorator()
     def post(self, *args, **kwargs):
         data = self.request.data
         friend_id = data.get('friend_account')
-        account = Account.objects.get(user=self.request.user)
-        friend = Account.objects.filter(id=friend_id).first()
-        if friend is None:
-            return Response({'error': 'This account does not exist'}, status=404)
-
-        if account.id == friend.id:
-            return Response({'error': 'You can`t send a request to yourself'}, status=400)
-
-        already_friends = friend.friends.filter(id=account.id).first() is not None
-        if already_friends:
-            return Response({'error': 'You are already friends'}, status=400)
-
-        mutual_request = friend.friend_requests.filter(to_account=account).first()
-        if mutual_request is not None:
-            friend.friend_requests.filter(id=mutual_request.id).delete()
-            friend.friends.add(account)
-            account.friends.add(friend)
-            return Response({'success': 'You are friends now'}, status=200)
-        else:
-            if account.friend_requests.filter(to_account=friend).first() is not None:
-                return Response({'error': 'You have already sent a request to this user'}, status=400)
-
-            account.friend_requests.create( from_account=account, to_account=friend)
-            return Response({'success': 'Your request has been sent'}, status=200)
+        account = account_service.get_current_account(self.request)
+        try:
+            friend = account_service.get_account_by_id(friend_id)
+        except ObjectDoesNotExist:
+            return Response({'friend_account': ['This account does not exist']}, status=404)
+        try:
+            account_service.send_friend_request(account, friend)
+        except Exception as e:
+            return Response({'friend_account': [str(e)]}, status=400)
+        return Response(status=204)
 
     @try_except_decorator()
     def delete(self, *args, **kwargs):
-        data = self.request.data
-        friend_id = data.get('friend_account')
-        friend = Account.objects.filter(id=friend_id).first()
-        if friend is None:
-            return Response({'error': 'This account does not exist'}, status=404)
+        friend_id = self.request.data.get('friend_account')
+        try:
+            friend = account_service.get_account_by_id(friend_id)
+        except ObjectDoesNotExist:
+            return Response({'friend_account': ['This account does not exist']}, status=404)
 
-        account = Account.objects.get(user=self.request.user)
-        friend = account.friends.filter(id=friend_id).first()
-        if friend is None:
-            return Response({'error': 'You aren`t friends'}, status=400)
-        account.friends.remove(friend)
-        friend.friends.remove(account)
-        return Response({'success': 'You aren`t friends now'}, status=200)
+        try:
+            account_service.delete_friend(account_service.get_current_account(self.request), friend)
+        except Exception as e:
+            return Response({'friend_account': [str(e)]}, status=400)
+            
+        return Response(status=204)

@@ -1,13 +1,16 @@
-from django.db.models import Subquery
 from rest_framework import generics, permissions
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from posts.services import PostService
 from .models import Post
 from .serializers import PostSerializer, PostWithAuthorSerializer
 from helpers.decorators import try_except_decorator
 from account.permissions import IsOwner
 from account.models import Account
+from account.services import AccountService
 
+acs = AccountService()
+ps = PostService()
 
 class PostView(generics.ListCreateAPIView):
     """
@@ -21,8 +24,8 @@ class PostView(generics.ListCreateAPIView):
     serializer_class = PostSerializer
 
     def create(self, request, *args, **kwargs):
-        account = request.user.account
-        self.request.data['author'] = account.id
+        account = acs.get_current_account(self.request)
+        self.request.data['author'] = account.pk
         return super().create(request, *args, **kwargs)
 
 
@@ -54,7 +57,7 @@ class CurrentAccountPostsView(APIView):
     """
     @try_except_decorator()
     def get(self, *args, **kwargs):
-        account = Account.objects.get(user=self.request.user)
+        account = acs.get_current_account(self.request)
         serializer = PostSerializer(account.posts, many=True)
         return Response(serializer.data) 
 
@@ -65,6 +68,6 @@ class FriendsPostsView(APIView):
     """
     @try_except_decorator()
     def get(self, *args, **kwargs):
-        account = Account.objects.get(user=self.request.user)
-        posts = Post.objects.filter(author_id__in=Subquery(account.friends.values('id'))).select_related('author')
+        account = acs.get_current_account(self.request)
+        posts = ps.get_posts_of_friends(account)
         return Response(PostWithAuthorSerializer(posts, many=True).data)

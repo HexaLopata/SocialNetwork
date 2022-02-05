@@ -9,10 +9,9 @@ def try_except_decorator(error_message: str = 'Something went wrong', status=500
                 return function(self, *args, **kwargs)
             except Exception as e:
                 if DEBUG:
-                    return Response({'error': e}, status=status)
+                    return Response({'detail': str(e)}, status=status)
                 else:
-                    return Response({'error': error_message}, status=status)
-
+                    return Response({'detail': error_message}, status=status)
 
         return wrapper
     return decorator
