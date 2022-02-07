@@ -1,8 +1,6 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import generics, permissions
-from django.core.exceptions import ObjectDoesNotExist
-
 from .services import AccountService
 from .models import Account
 from .serializers import AccountSerializer
@@ -86,7 +84,7 @@ class CurrentAccountFriendsView(APIView):
         account = account_service.get_current_account(self.request)
         try:
             friend = account_service.get_account_by_id(friend_id)
-        except ObjectDoesNotExist:
+        except Account.DoesNotExist:
             return Response({'friend_account': ['This account does not exist']}, status=404)
         try:
             account_service.send_friend_request(account, friend)
@@ -99,7 +97,7 @@ class CurrentAccountFriendsView(APIView):
         friend_id = self.request.data.get('friend_account')
         try:
             friend = account_service.get_account_by_id(friend_id)
-        except ObjectDoesNotExist:
+        except Account.DoesNotExist:
             return Response({'friend_account': ['This account does not exist']}, status=404)
 
         try:

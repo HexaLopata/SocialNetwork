@@ -21,6 +21,7 @@ class ChatService:
     def is_member_async(self, chat: Chat, account: Account):
         return self.is_member(chat, account)
 
+
 class MessageService:
     def create_message(
         self,
@@ -101,6 +102,3 @@ class MessageService:
     @database_sync_to_async
     def is_owner_async(self,  message: Union[Message, int], account: Union[Account, int]):
         return self.is_owner(message, account)
-
-
-

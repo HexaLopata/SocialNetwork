@@ -16,6 +16,9 @@ class AccountService:
             raise ValueError('User is not authenticated')
         return user.account
 
+    def get_with_prefetched(self, account: Account, *prefetched_fields):
+        return Account.objects.filter(pk=account.pk).prefetch_related(*prefetched_fields).first()
+
     @database_sync_to_async
     def get_current_account_async(self, scope) -> Account:
         return scope['user'].account
@@ -47,3 +50,4 @@ class AccountService:
 
         account.friends.remove(friend)
         friend.friends.remove(account)
+        

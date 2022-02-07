@@ -10,3 +10,14 @@ class IsOwner(permissions.BasePermission):
             return obj.author.user == request.user
         else:
             return False
+
+class IsMember(permissions.BasePermission):
+    """
+    Custom permission to only allow members of an object to edit it.
+    """
+
+    def has_object_permission(self, request, view, obj):
+        if hasattr(obj, 'members'):
+            return obj.members.filter(id=request.user.account.id).first() is not None
+        else:
+            return False
