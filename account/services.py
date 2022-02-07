@@ -2,6 +2,7 @@ from django.http import HttpRequest
 from django.contrib.auth.models import AnonymousUser
 from django.core.exceptions import ObjectDoesNotExist
 from account.models import Account
+from channels.db import database_sync_to_async
 
 class AccountService:
     def get_account_by_id(self, id: int, queryset = None) -> Account:
@@ -14,6 +15,10 @@ class AccountService:
         if isinstance(user, AnonymousUser):
             raise ValueError('User is not authenticated')
         return user.account
+
+    @database_sync_to_async
+    def get_current_account_async(self, scope) -> Account:
+        return scope['user'].account
 
     def send_friend_request(self, from_ : Account, to: Account):
         if from_.id == to.id:

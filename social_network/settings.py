@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django_cleanup.apps.CleanupConfig',
+    'channels',
     'rest_framework',
     'session_auth',
     'account',
@@ -48,7 +49,10 @@ INSTALLED_APPS = [
     'frontend'
 ]
 
+CORS_ALLOW_ALL_ORIGINS = True
+
 MIDDLEWARE = [
+
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -76,8 +80,18 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'social_network.wsgi.application'
 
+# WSGI_APPLICATION = 'social_network.wsgi.application'
+ASGI_APPLICATION = 'social_network.asgi.application'
+
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [('127.0.0.1', 6379)],
+        },
+    },
+}
 
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases

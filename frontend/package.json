@@ -24,6 +24,7 @@
     "webpack-dev-server": "^4.7.3"
   },
   "dependencies": {
+    "axios": "^0.25.0",
     "babel-preset-react-app": "^10.0.1",
     "react-router-dom": "^6.2.1"
   }
