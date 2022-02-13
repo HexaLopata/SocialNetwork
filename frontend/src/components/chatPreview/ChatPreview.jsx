@@ -7,16 +7,14 @@ import classes from './ChatPreview.module.css'
 
 function ChatPreview({ ...props }) {
     const [ref, isHovering] = useHover()
-
+    const blockClasses = isHovering ? [classes.blockHover, classes.hoverable] : [classes.hoverable]
+    
     return (
         <div {...props} className={classes.chatPreview}>
-            <Block 
+            <Block
                 ref={ref}
-                style={{
-                    transition: 'all 0.2s ease-in',
-                    cursor: 'pointer',
-                    backgroundColor: isHovering ? '#ededed' : ''
-                }}>
+                additionalClasses = {blockClasses}
+            >
                 <StackPanel direction='row'>
                     <img className={classes.profilePicture} />
                     <StackPanel style={{ padding: '10px' }}>

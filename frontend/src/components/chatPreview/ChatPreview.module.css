@@ -12,3 +12,12 @@
     border: none;
     border-radius: 15px;
 }
+
+.hoverable {
+    transition: ease-in all 0.2s;
+}
+
+.blockHover {
+    cursor: pointer;
+    background-color: #ededed; 
+}

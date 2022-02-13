@@ -1,8 +1,8 @@
-import { useEffect, useState, createRef } from "react"
+import { useEffect, useState, useRef } from "react"
 
 export const useHover = () => {
     const [isHovering, setHovering] = useState(false)
-    const ref = createRef()
+    const ref = useRef()
 
     const hover = () => { setHovering(true) }
     const leaveHover = () => { setHovering(false) }
