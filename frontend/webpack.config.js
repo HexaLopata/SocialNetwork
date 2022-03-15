@@ -8,6 +8,7 @@ module.exports = {
         path: path.resolve(__dirname, 'static/frontend'),
         filename: "[hash].[name].js"
     },
+    devtool: 'source-map',
     resolve: { extensions: [".js", ".jsx"] },
     optimization: {
         splitChunks: {

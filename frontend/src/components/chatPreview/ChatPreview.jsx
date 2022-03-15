@@ -8,7 +8,7 @@ import classes from './ChatPreview.module.css'
 function ChatPreview({ ...props }) {
     const [ref, isHovering] = useHover()
     const blockClasses = isHovering ? [classes.blockHover, classes.hoverable] : [classes.hoverable]
-    
+
     return (
         <div {...props} className={classes.chatPreview}>
             <Block

@@ -1,16 +1,20 @@
-import LoginPage from "../pages/Login";
-import MessagesPage from "../pages/Messages";
-import NewsPage from "../pages/News";
-import ProfilePage from "../pages/Profile";
-import EditProfilePage from "../pages/EditProfile";
-import ChatPage from "../pages/Chat";
+import LoginPage from "../pages/LoginPage";
+import MessagesPage from "../pages/MessagesPage";
+import NewsPage from "../pages/NewsPage";
+import ProfilePage from "../pages/ProfilePage";
+import EditProfilePage from "../pages/EditProfilePage";
+import ChatPage from "../pages/ChatPage";
 
-export const routes = [
-    { path: '/login', permission: 'Unauthorized', element: LoginPage },
-    { path: '/profile', permission: 'Authorized', element: ProfilePage },
-    { path: '/news', permission: 'Authorized', element: NewsPage },
-    { path: '/messages', permission: 'Authorized', element: MessagesPage },
-    { path: '/profile/:id', permission: 'Any', element: ProfilePage },
-    { path: '/editProfile', permission: 'Authorized', element: EditProfilePage },
-    { path: '/chat/:id', permission: 'Authorized', element: ChatPage },
+export const publicRoutes = [
+    { path: '/login', element: <LoginPage/>, name: 'Логин' },
+    { path: '/profile/:id', element: <ProfilePage/>, name: 'Профиль' },
+]
+
+export const privateRoutes = [
+    { path: '/profile', element: <ProfilePage/>, name: 'Профиль' },
+    { path: '/news', element: <NewsPage/>, name: 'Лента' },
+    { path: '/editProfile', element: <EditProfilePage/>, name: 'Редактировать профиль' },
+    { path: '/chat/:id', element: <ChatPage/>, name: 'Чат' },
+    { path: '/messages', element: <MessagesPage/>, name: 'Сообщения' },
+    { path: '/profile/:id', element: <ProfilePage/>, name: 'Профиль' },
 ]
