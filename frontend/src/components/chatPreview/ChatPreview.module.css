@@ -1,23 +1,32 @@
 .chatPreview {
-    height: 130px;
+    height: 200px;
+    width: 100%;
     display: flex;
     flex-direction: row;
+    align-items: center;   
+    border-radius: 25px;
+    column-gap: 20px;
+    background-color: var(--secondary-color);
+    padding: 0 30px;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
+    border-bottom: 3px solid var(--primary-accent-color);
 }
 
-.profilePicture {
+.chatPreview:hover {
+    background-color: var(--secondary-color-hover);
+}
+
+.chatPicture {
     width: 100px;
     height: 100px;
-    min-width: 100px;
-    background-color: #AB8FA7;
-    border: none;
     border-radius: 15px;
 }
 
-.hoverable {
-    transition: ease-in all 0.2s;
+.chatNameContainer {
+    height: 100px;
 }
 
-.blockHover {
-    cursor: pointer;
-    background-color: #ededed; 
+.chatNameContainer > * {
+    margin: 0 0 10px 0;
 }

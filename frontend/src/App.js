@@ -1,16 +1,13 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import NavbarSearchField from "./components/searchFields/navbarSearchField/NavbarSearchField";
-import Navbar from "./components/navbar/Navbar";
-import ErrorPage from "./pages/ErrorPage";
+import Navbar from './components/navbar/Navbar'
 import { privateRoutes, publicRoutes } from "./global/routes";
 import './styles/App.css'
 import CSRF from "./components/csrf/CSRF";
 import { connect } from "react-redux";
 import { checkIsAuthenticated } from "./redux/reducers/authReducer/actions";
 import { useEffect, useMemo } from "react";
-import Spinner from "./components/spinner/Spinner";
-import CenteredBlock from "./components/general/centeredBlock/CenteredBlock";
 import AccountLoader from "./components/accountLoader/AccountLoader";
+import InfoModal from "./components/modal/infoModal/InfoModal";
 
 function App({ isAuthenticated, isIniting, checkIsAuthenticated }) {
 
@@ -23,19 +20,17 @@ function App({ isAuthenticated, isIniting, checkIsAuthenticated }) {
   return (
     <BrowserRouter>
       <CSRF />
-
+      <Navbar />
+      <InfoModal />
       {isIniting ?
-        <CenteredBlock>
-          <Spinner />
-        </CenteredBlock>
+        <div>
+          Загрузка
+        </div>
         :
         <AccountLoader>
-          <Navbar>
-            <NavbarSearchField placeholder='Поиск' />
-          </Navbar>
           <Routes>
-            {routes.map(e => <Route key={e.path} path={e.path} element={e.element} />)}
-            <Route path="*" element={<ErrorPage />} />
+            {routes.map(e => <Route key={e.path} path={e.path} element={<e.element />} />)}
+            {/* <Route path="*" element={<ErrorPage />} /> */}
           </Routes>
         </AccountLoader>
       }

@@ -1,0 +1,13 @@
+.pageContainer {
+    display: flex;
+    flex-direction: row;
+    column-gap: 20px;
+    justify-content: flex-end;
+    padding: 30px 50px 30px 100px;
+    height: 100%;
+} 
+
+.formContainer {
+    width: 1000px;
+    height: 200px;   
+}

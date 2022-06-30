@@ -1,8 +1,6 @@
 import React, { useEffect } from 'react'
 import { connect } from 'react-redux'
 import { fetchAccount } from '../../redux/reducers/accountReducer/actions'
-import CenteredBlock from '../general/centeredBlock/CenteredBlock'
-import Spinner from '../spinner/Spinner'
 
 export const AccountLoader = ({ children, fetchAccount, account, isAuthenticated }) => {
 
@@ -19,9 +17,7 @@ export const AccountLoader = ({ children, fetchAccount, account, isAuthenticated
             {account ?
                 <>{children}</>
                 :
-                <CenteredBlock>
-                    <Spinner />
-                </CenteredBlock>
+                <div>Загрузка</div>
             }
         </>
     )

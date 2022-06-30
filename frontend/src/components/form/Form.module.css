@@ -1,0 +1,15 @@
+.form {
+    background-color: var(--secondary-color);
+    border-bottom: 3px solid var(--primary-accent-color);
+    padding: 30px 75px 60px 75px;
+    border-radius: 15px;
+    width: 100%;
+}
+
+.form > * {
+    margin-top: 25px;
+}
+
+.form > *:first-child {
+    margin-top: 10px;
+}

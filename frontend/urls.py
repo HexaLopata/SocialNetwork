@@ -9,4 +9,6 @@ urlpatterns = [
     path('messages/', views.index),
     path('login/', views.index),
     path('editProfile/', views.index),
+    path('register/', views.index),
+    path('chat/<int:pk>/', views.index),
 ]

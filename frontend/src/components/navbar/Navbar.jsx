@@ -1,34 +1,25 @@
-import { connect } from 'react-redux';
-import NavbarLink from '../links/navbarLink/NavbarLink';
+import React from 'react'
+import NavbarButton from '../navbarButton/NavbarButton'
 import classes from './Navbar.module.css'
+import messageImage from './message-svgrepo-com.svg'
+import newsImage from './news-svgrepo-com.svg'
+import profileImage from './profile-svgrepo-com.svg'
 
-const getLinks = (isAuthenticated) => {
-    if (isAuthenticated) {
-        return (
-            <>
-                <NavbarLink to="/profile">Профиль</NavbarLink>
-                <NavbarLink to="/news">Лента</NavbarLink>
-                <NavbarLink to="/messages">Сообщения</NavbarLink>
-            </>
-        )
-    } 
-    return (
-        <NavbarLink to="/login">Логин</NavbarLink>
-    )
+export default function Navbar() {
+  return (
+    <div className={classes.navbar}>
+        <NavbarButton
+            imageSrc={messageImage}
+            text='Сообщения'
+        />
+        <NavbarButton
+            imageSrc={newsImage}
+            text='Посты'
+        />
+        <NavbarButton
+            imageSrc={profileImage}
+            text='Профиль'
+        />
+    </div>
+  )
 }
-
-function Navbar({ children, isAuthenticated }) {
-    return (
-        <div className={classes.navbar}>
-            {children}
-            {getLinks(isAuthenticated)}
-        </div>
-    );
-}
-
-const mapStateToProps = (state, ownProps) => ({
-    isAuthenticated: state.auth.isAuthenticated,
-    ...ownProps
-})
-
-export default connect(mapStateToProps)(Navbar);

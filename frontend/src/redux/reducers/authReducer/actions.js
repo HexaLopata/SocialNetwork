@@ -39,6 +39,14 @@ export const login = (email, password, csrf) => {
     }
 }
 
+export const register = (username, password, firstName, lastName, birthdate, csrf) => {
+    return (dispatch) => {
+        sendForm(dispatch, 
+            () => AuthService.register(username, password, firstName, lastName, birthdate, csrf)
+        )
+    }
+}
+
 export const logout = (csrf) => {
     return (dispatch) => {
         sendForm(dispatch,

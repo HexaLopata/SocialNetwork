@@ -1,0 +1,30 @@
+.sendMessageButton {
+    width: 50px;
+    height: 50px;
+    background-color: var(--primary-accent-color);
+    mask-size: 40px 40px;
+    mask-position: center;
+    mask-repeat: no-repeat;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
+}
+
+.sendMessageButton:hover {
+    background-color: var(--contrast-text-color);
+}
+
+.buttonContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    border: 2px solid var(--primary-color);
+    background-color: var(--secondary-color-hover);
+    transition: border-color 0.2s ease-in-out;
+}
+
+.buttonContainer:hover {
+    border-color: var(--contrast-text-color);
+}

@@ -1,0 +1,80 @@
+.likeButton {
+    position: relative;
+    border: none;
+    padding: 7px 14px;
+    width: 150px;
+    height: 50px;
+    background-color: var(--secondary-color-hover);
+    cursor: pointer;
+    border-radius: 25px;
+    border: 2px solid var(--primary-color);
+    color: var(--contrast-text-color);
+    font-weight: bold;
+    transition:
+        border-color 0.2s ease-in-out,
+        background-color 0.2s ease-in-out,
+        width 0.2s ease-out;
+    animation: textAppearing 0.2s ease-in-out forwards;
+}
+
+@keyframes textAppearing {
+    from {
+        font-size: 0;
+    }
+
+    to {
+        font-size: 15px;
+    }
+}
+
+@keyframes textDisappearing {
+    to { font-size: 0; }
+}
+
+.likeButton > .heart {
+    display: none;
+}
+
+.likeButton:hover {
+    border: 2px solid var(--primary-accent-color);
+}
+
+.likeButton.closed {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+    width: 50px;
+    background-color: var(--secondary-color-hover);
+    animation: textDisappearing 0s forwards;
+}
+
+.likeButton.closed > .heart {
+    display: block;
+}
+
+.likeButton.closed:hover > .heart {
+    background-color: rgb(224, 45, 45);
+}
+
+.heart {
+    --width: 100%;
+    --height: 100%;
+    background-color: rgb(207, 48, 48);
+    width: var(--width);
+    height: var(--height);
+    mask-repeat: no-repeat;
+    mask-position: calc(var(--width) / 1.95) calc(var(--height) / 1.7);
+    animation: heartAppearing 0.2s linear forwards;
+    transition: background-color 0.2s ease-in-out;
+}
+
+@keyframes heartAppearing {
+    from {
+        mask-size: 0%;
+    }
+
+    to {
+        mask-size: 60%;
+    }
+}

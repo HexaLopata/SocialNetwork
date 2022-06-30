@@ -27,7 +27,7 @@ module.exports = {
             {
                 test: /\.(js|jsx)$/,
                 exclude: /node_modules/,
-                use: [ "babel-loader" ]
+                use: ["babel-loader"]
             },
             {
                 test: /\.css$/,
@@ -38,6 +38,12 @@ module.exports = {
                         options: { modules: true }
                     }
                 ]
+            },
+
+            // For newer versions of Webpack it should be
+            {
+                test: /\.(jpe?g|png|gif|svg)$/i,
+                loader: 'file-loader'
             }
         ]
     }

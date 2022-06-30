@@ -1,0 +1,28 @@
+.navbarButton {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    height: 50px;
+    width: 250px;
+    cursor: pointer;
+    transition: background-color 0.35s ease-in-out;
+}
+
+.navbarButton:hover {
+    background-color: var(--secondary-color-hover);
+}
+
+.buttonLogo {
+    width: 30px;
+    height: 30px;
+    margin-right: 15px;
+    margin-left: 15px;
+    mask-size: 30px;
+    background-color: var(--contrast-text-color);
+    mask-repeat: no-repeat;
+}
+
+.buttonText {
+    color: var(--contrast-text-color);
+}

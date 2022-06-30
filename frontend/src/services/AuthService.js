@@ -1,4 +1,5 @@
 import axios from 'axios';
+import formatDate from '../utils/formatDate';
 
 export default class AuthService {
     static checkIsAuthenticated() {
@@ -12,10 +13,13 @@ export default class AuthService {
         }, { headers:  {'X-CSRFToken': csrf } })  
     }
 
-    static register(username, password, csrf) {
+    static register(username, password, firstName, lastName, birthdate, csrf) {
         return axios.post('/api/auth/register/', {
             'username': username,
-            'password': password
+            'password': password,
+            'first_name': firstName,
+            'last_name': lastName,
+            'birthdate': formatDate(birthdate)
         }, { headers:  {'X-CSRFToken': csrf } })  
     }
 

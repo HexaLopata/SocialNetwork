@@ -1,0 +1,8 @@
+.chatSelectionContainer {
+    margin: 0 auto;
+    padding: 20px 0;
+    max-width: 800px;
+    display: flex;
+    flex-direction: column;
+    row-gap: 30px;
+}

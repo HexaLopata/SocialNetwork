@@ -1,0 +1,104 @@
+.container {
+    position: relative;
+    --submitingAnimationDuration: 0.5s;
+}
+
+.submitButton {
+    height: 50px;
+    width: 150px;
+    border-radius: 25px;
+    background-color: var(--secondary-color-hover);
+    color: var(--contrast-text-color);
+    font-weight: bold;
+    cursor: pointer;
+    border: 3px solid var(--primary-color);
+    transition:
+        background-color 0.2s ease-in-out,
+        border-color 0.2s ease-out;
+}
+
+.submitButton:hover {
+    border-color: var(--primary-accent-color);
+}
+
+.submitButton:focus-visible {
+    border-color: var(--primary-accent-color);
+}
+
+.animating {
+    display: none;
+}
+
+.animating ~ .buttonAnimation {
+    display: block;
+    animation: submiting var(--submitingAnimationDuration) forwards;
+}
+
+.buttonAnimation {
+    position: relative;
+    display: none;
+    height: 50px;
+    width: 150px;
+    border-radius: 25px;
+    background-color: var(--secondary-color-hover);
+    color: var(--contrast-text-color);
+    font-weight: bold;
+    border: 3px solid var(--primary-color);
+}
+
+.animating ~ .loader {
+    background-color: transparent;
+    position: absolute;
+    font-size: 0;
+    border-radius: 50%;
+    border: 5px solid transparent;
+    border-top: 5px solid var(--primary-accent-color);
+    height: 40px;
+    width: 40px;
+    opacity: 0;
+    left: 0;
+    top: 0;
+    animation: rotating 1s var(--submitingAnimationDuration) infinite cubic-bezier(.65,.05,.36,1),
+               appearing 1s calc(var(--submitingAnimationDuration) * 0.5) forwards;
+}
+
+@keyframes appearing {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes submiting {
+    0% {
+        width: 150px;
+    }
+
+    50% {
+        width: 50px;
+        height: 50px;
+        font-size: 0;
+        border: 3px solid var(--primary-color);
+        opacity: 1;
+    }
+
+    100% {
+        width: 50px;
+        height: 50px;
+        border: 3px solid var(--primary-color);
+        opacity: 0;
+    }
+}
+
+@keyframes rotating {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}

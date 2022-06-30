@@ -8,18 +8,29 @@
 
 body, html {
     height: 100%;
-    background-color: #e7e0de;
+    background-color: var(--primary-color);
 }
 
-a {
-    text-decoration: none;
-    color: inherit;
+h1, h2, h3, h4, h5, h6, p {
+    font-weight: 400;
+    color: var(--primary-text-color);
 }
 
-button {
-    border: none;
+*::selection {
+    background-color: var(--primary-accent-color);
+    color: var(--contrast-text-color);
 }
 
 #root {
     height: 100%;
+}
+
+:root {
+    --primary-background-color: rgb(53, 53, 53);
+    --primary-color: rgb(44, 44, 44);
+    --secondary-color: rgb(26, 26, 26);
+    --secondary-color-hover: rgb(17, 17, 17);
+    --primary-text-color: rgb(167, 167, 167);
+    --contrast-text-color: white;
+    --primary-accent-color: #b12f4b;
 }

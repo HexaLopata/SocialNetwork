@@ -1,0 +1,41 @@
+.message {
+    color: var(--contrast-text-color);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    max-width: 70%;
+    padding: 5px 15px 10px 15px;
+    border-radius: 25px;
+}
+
+.messageImage {
+    max-width: 100%;
+    margin-top: 10px;
+    margin-bottom: 5px;
+    border-radius: 10px;
+}
+
+.message > h3 {
+    margin: 5px 0 10px 0;
+}
+
+.messageText {
+    color: var(--contrast-text-color);
+    margin: 0;
+    font-size: 14px;
+    margin-right: 10px;
+}
+
+.my {
+    float: right;
+    background-color: var(--secondary-color-hover);
+}
+
+.other {
+    background-color: var(--primary-accent-color);
+    float: left;
+}
+
+.other>.messageText::selection {
+    background-color: var(--secondary-color);
+}

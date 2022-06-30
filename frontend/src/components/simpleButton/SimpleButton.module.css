@@ -1,0 +1,31 @@
+.simpleButton {
+    border-radius: 20px;
+    color: var(--contrast-text-color);
+    border: 2px solid var(--secondary-color);
+    cursor: pointer;
+    font-weight: bold;
+    transition:
+        background-color 0.2s ease-in-out,
+        border-color 0.2s ease-out;
+}
+
+.simpleButton:hover {
+    border-color: var(--primary-accent-color);
+}
+
+.simpleButton:focus-visible {
+    border-color: var(--primary-accent-color);
+}
+
+.secondary {
+    background-color: var(--secondary-color);
+}
+
+.primary {
+    background-color: var(--primary-color);
+}
+
+.dark {
+    border-color: var(--primary-color);
+    background-color: var(--secondary-color-hover);
+}

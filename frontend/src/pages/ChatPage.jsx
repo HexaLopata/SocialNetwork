@@ -1,12 +1,11 @@
-import DefaultPageWrapper from "../components/pageWrappers/DefaultPageWrapper";
-import HeaderLabel from "../components/general/labels/headerLabel/HeaderLabel";
+import React from 'react'
+import Chat from '../components/chat/Chat'
+import classes from './ChatPage.module.css'
 
-const ChatPage = function () {
+export default function ChatPage() {
     return (
-        <DefaultPageWrapper>
-            <HeaderLabel>Чат</HeaderLabel>
-        </DefaultPageWrapper>
-    );
+        <div className={classes.chatPageContainer}>
+            <Chat />
+        </div>
+    )
 }
-
-export default ChatPage;

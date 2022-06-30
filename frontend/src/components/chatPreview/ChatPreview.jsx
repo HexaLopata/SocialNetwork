@@ -1,30 +1,17 @@
-import { useHover } from '../../hooks/useHover';
-import Block from '../general/block/Block';
-import HeaderLabel from '../general/labels/headerLabel/HeaderLabel'
-import NormalLabel from '../general/labels/normalLabel/NormalLabel';
-import StackPanel from '../general/stackpanel/StackPanel';
+import React from 'react'
 import classes from './ChatPreview.module.css'
 
-function ChatPreview({ ...props }) {
-    const [ref, isHovering] = useHover()
-    const blockClasses = isHovering ? [classes.blockHover, classes.hoverable] : [classes.hoverable]
-
+export default function ChatPreview({ chatPicture, chatName, lastMessage }) {
     return (
-        <div {...props} className={classes.chatPreview}>
-            <Block
-                ref={ref}
-                additionalClasses = {blockClasses}
-            >
-                <StackPanel direction='row'>
-                    <img className={classes.profilePicture} />
-                    <StackPanel style={{ padding: '10px' }}>
-                        <HeaderLabel>Имя собеседника</HeaderLabel>
-                        <NormalLabel>Ты: Последнее сообщение</NormalLabel>
-                    </StackPanel>
-                </StackPanel>
-            </Block>
+        <div className={classes.chatPreview}>
+            <img
+                src={chatPicture}
+                alt="Изображение чата"
+                className={classes.chatPicture} />
+            <div className={classes.chatNameContainer}>
+                <h2>{chatName}</h2>
+                <h4>{lastMessage}</h4>
+            </div>
         </div>
-    );
+    )
 }
-
-export default ChatPreview;
