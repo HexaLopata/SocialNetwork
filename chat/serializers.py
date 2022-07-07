@@ -1,3 +1,4 @@
+from account.serializers import ThumbnailAccountSerializer
 from rest_framework import serializers
 from .models import Chat, Message
 
@@ -9,7 +10,7 @@ class MessageSerializer(serializers.ModelSerializer):
 class ChatSerializer(serializers.ModelSerializer):
     class Meta:
         model = Chat
-        fields = ['id', 'members']
+        fields = ['id', 'members', 'name', 'image', 'background_image']
 
 class ChatNestedSerializer(serializers.ModelSerializer):
     class Meta:
