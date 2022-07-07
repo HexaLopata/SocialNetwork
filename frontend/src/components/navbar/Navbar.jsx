@@ -11,14 +11,17 @@ export default function Navbar() {
         <NavbarButton
             imageSrc={messageImage}
             text='Сообщения'
+            to='/messages'
         />
         <NavbarButton
             imageSrc={newsImage}
             text='Посты'
+            to='/news'
         />
         <NavbarButton
             imageSrc={profileImage}
             text='Профиль'
+            to='/profile'
         />
     </div>
   )

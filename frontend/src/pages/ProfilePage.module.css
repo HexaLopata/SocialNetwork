@@ -25,6 +25,7 @@
     color: var(--contrast-text-color);
     background-color: black;
     border-radius: 25px;
+    object-fit: cover;
 }
 
 .profileInfo {

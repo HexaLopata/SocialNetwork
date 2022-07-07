@@ -1,5 +1,5 @@
 import AuthService from '../../../services/AuthService'
-import { sendForm } from '../appReducer/helpers'
+import { sendRequest } from '../appReducer/helpers'
 import Cookies from 'universal-cookie'
 import { setIniting } from '../appReducer/actions'
 
@@ -29,7 +29,7 @@ export const fetchCSRF = () => {
 
 export const login = (email, password, csrf) => {
     return (dispatch) => {
-        sendForm(dispatch,
+        sendRequest(dispatch,
             () => AuthService.login(email, password, csrf),
             () => {
                 dispatch(setCSRF(''))
@@ -41,7 +41,7 @@ export const login = (email, password, csrf) => {
 
 export const register = (username, password, firstName, lastName, birthdate, csrf) => {
     return (dispatch) => {
-        sendForm(dispatch, 
+        sendRequest(dispatch, 
             () => AuthService.register(username, password, firstName, lastName, birthdate, csrf)
         )
     }
@@ -49,7 +49,7 @@ export const register = (username, password, firstName, lastName, birthdate, csr
 
 export const logout = (csrf) => {
     return (dispatch) => {
-        sendForm(dispatch,
+        sendRequest(dispatch,
             () => AuthService.logout(csrf),
             () => {
                 dispatch(setIsAuth(false))

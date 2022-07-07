@@ -33,7 +33,6 @@
     opacity: 1;
     mask-repeat: no-repeat;
     mask-size: cover;
-    mask-image: url('icons8-delete.svg');
 }
 
 .clear:hover {
@@ -41,5 +40,5 @@
 }
 
 .clear.transparent {
-    opacity: 0;
+    display: none;
 }

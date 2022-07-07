@@ -1,5 +1,6 @@
 import React from 'react'
 import classes from './TextInput.module.css'
+import deleteIcon from './icons8-delete.svg'
 
 function TextInput({ value, setValue, password = false, placeholder = '' }) {
 
@@ -20,6 +21,7 @@ function TextInput({ value, setValue, password = false, placeholder = '' }) {
       />
       <div
         className={getClearButtonClasses()}
+        style={{ maskImage: `url(${deleteIcon})` }}
         onClick={e => setValue('')}
       />
     </div>

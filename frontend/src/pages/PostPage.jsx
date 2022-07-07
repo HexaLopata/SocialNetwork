@@ -1,24 +1,28 @@
-import React from 'react'
-import Post from '../components/post/Post'
+import React, { useState } from 'react'
+import { connect } from 'react-redux'
+import PostList from '../components/postList/PostList'
+import { fetchFriendsPosts } from '../redux/reducers/postReducer/actions'
 import classes from './PostPage.module.css'
 
-export default function PostPage() {
+function PostPage({ posts, fetchPosts }) {
+
+    useState(() => {
+        fetchPosts()
+    }, [])
+
     return (
         <div className={classes.postPageContainer}>
-            <Post
-                body={`- Я родился 5 мая 1955 года в городе Пятигорск на улице пятой Посёлковой в доме номер 5, 55 квартире, у меня было 5 братьев, вместе мы учились в 55 школе, затем поступили в пятый техникум. Я вырос и работаю на заводе в пятом цеху за 55 рублей в месяц. У меня было 5 детей. Все они в пятом классе получили все пятёрки за год. И вот так 5 мая 1995 года мне стало думаться, что в моей жизни есть какая-то магия цифр. Я пошёл на ипподром и поставил все свои деньги на лошадь под номером 5.
-                      - Ну и как, выиграл?
-                      - Нет, она пришла пятой.`}
-                authorName='Леха'
-                imageSrc='Manarola-Seaside-Mountain-Landscape-ipad-air.jpg'
-            />
-            <Post
-                body={`- Я родился 5 мая 1955 года в городе Пятигорск на улице пятой Посёлковой в доме номер 5, 55 квартире, у меня было 5 братьев, вместе мы учились в 55 школе, затем поступили в пятый техникум. Я вырос и работаю на заводе в пятом цеху за 55 рублей в месяц. У меня было 5 детей. Все они в пятом классе получили все пятёрки за год. И вот так 5 мая 1995 года мне стало думаться, что в моей жизни есть какая-то магия цифр. Я пошёл на ипподром и поставил все свои деньги на лошадь под номером 5.
-                      - Ну и как, выиграл?
-                      - Нет, она пришла пятой.`}
-                authorName='Леха'
-                imageSrc='Manarola-Seaside-Mountain-Landscape-ipad-air.jpg'
-            />
+            <PostList posts={posts} />
         </div>
     )
 }
+
+const mapStateToProps = (state) => ({ posts: state.post.friendsPosts })
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        fetchPosts: () => dispatch(fetchFriendsPosts())
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(PostPage)
