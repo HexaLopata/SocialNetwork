@@ -1,10 +1,10 @@
-import { SET_ACCOUNT } from "./actions"
+import { SET_ACCOUNT } from './actions'
 
 const initialState = {
     account: null
 }
 
-export default (state = initialState, { type, payload }) => {
+const accountReducer = (state = initialState, { type, payload }) => {
     switch (type) {
         case SET_ACCOUNT:
             return { ...state, account: payload }
@@ -13,3 +13,5 @@ export default (state = initialState, { type, payload }) => {
             return state
     }
 }
+
+export default accountReducer

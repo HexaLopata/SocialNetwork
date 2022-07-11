@@ -6,7 +6,7 @@ export default function ChatPreview({ chatPicture, chatName, lastMessage }) {
         <div className={classes.chatPreview}>
             <img
                 src={chatPicture}
-                alt="Изображение чата"
+                alt='Изображение чата'
                 className={classes.chatPicture} />
             <div className={classes.chatNameContainer}>
                 <h2>{chatName}</h2>

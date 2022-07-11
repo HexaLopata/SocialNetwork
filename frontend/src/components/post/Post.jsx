@@ -16,7 +16,7 @@ export default function Post({ authorName, date, body, imageSrc }) {
 
                 {imageSrc ?
                     <div className={classes.imageContainer}>
-                        <img className={classes.postImage} src={imageSrc} alt="" />
+                        <img className={classes.postImage} src={imageSrc} alt='' />
                     </div>
                     :
                     <></>

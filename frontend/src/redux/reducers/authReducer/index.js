@@ -1,4 +1,4 @@
-import { SET_CSRF, SET_IS_AUTH } from "./actions"
+import { SET_CSRF, SET_IS_AUTH } from './actions'
 
 const initialState = {
     isAuthenticated: false,

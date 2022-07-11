@@ -7,7 +7,7 @@ const CSRF = ({ csrf, fetchCSRF }) => {
         if (csrf.trim() === '') {
             fetchCSRF()
         }
-    }, [csrf])
+    }, [csrf, fetchCSRF])
     return ( <></> )
 }
 

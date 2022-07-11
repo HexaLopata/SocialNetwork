@@ -1,4 +1,4 @@
-import { SET_ACCOUNT_POSTS, SET_FRIENDS_POSTS, ADD_ACCOUNT_POSTS, ADD_FRIENDS_POSTS } from "./actions"
+import { SET_ACCOUNT_POSTS, SET_FRIENDS_POSTS, ADD_ACCOUNT_POSTS, ADD_FRIENDS_POSTS } from './actions'
 
 const initialState = {
     accountPosts: [],

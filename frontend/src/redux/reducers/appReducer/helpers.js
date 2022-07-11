@@ -1,4 +1,4 @@
-import { setError, setIsFormUploading } from "./actions"
+import { setError, setIsFormUploading } from './actions'
 
 export const sendRequest = (dispatch, getAxiosResponse, then, catchError = () => {}) => {
     dispatch(setIsFormUploading(true))

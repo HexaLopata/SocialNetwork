@@ -1,5 +1,5 @@
-import PostService from "../../../services/PostService"
-import { sendRequest } from "../appReducer/helpers"
+import PostService from '../../../services/PostService'
+import { sendRequest } from '../appReducer/helpers'
 
 export const SET_ACCOUNT_POSTS = 'SET_ACCOUNT_POSTS'
 export const SET_FRIENDS_POSTS = 'SET_FRIENDS_POSTS'

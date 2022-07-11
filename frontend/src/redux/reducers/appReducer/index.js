@@ -1,4 +1,4 @@
-import { SET_ERROR, SET_INFO, SET_INIT, SET_IS_FORM_UPLOADING } from "./actions"
+import { SET_ERROR, SET_INFO, SET_INIT, SET_IS_FORM_UPLOADING } from './actions'
 
 const initialState = {
     isIniting: true,
@@ -7,7 +7,7 @@ const initialState = {
     info: ''
 }
 
-export default (state = initialState, { type, payload }) => {
+const appReducer = (state = initialState, { type, payload }) => {
     switch (type) {
         case SET_INIT:
             return { ...state, isIniting: payload }
@@ -25,3 +25,5 @@ export default (state = initialState, { type, payload }) => {
             return state
     }
 }
+
+export default appReducer

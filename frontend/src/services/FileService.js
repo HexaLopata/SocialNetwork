@@ -1,3 +1,5 @@
+import axios from 'axios';
+
 export default class FileService {
     static uploadImage(file, csrf) {
         const formData = new FormData()

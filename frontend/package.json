@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "webpack --mode development && mv ./static/frontend/index.html ./templates/frontend/",
     "build": "webpack --mode production && mv ./static/frontend/index.html ./templates/frontend/",
-    "start": "webpack --mode development && mv ./static/frontend/index.html ./templates/frontend/ && (python ../manage.py runserver || python3 ../manage.py runserver)"
+    "start": "npx eslint ./src && webpack --mode development && mv ./static/frontend/index.html ./templates/frontend/ && (python ../manage.py runserver || python3 ../manage.py runserver)"
   },
   "keywords": [],
   "author": "",
@@ -19,6 +19,8 @@
     "babel-preset-react-app": "^10.0.1",
     "clean-webpack-plugin": "^4.0.0",
     "css-loader": "^6.5.1",
+    "eslint": "^8.19.0",
+    "eslint-config-react-app": "^7.0.1",
     "file-loader": "^6.2.0",
     "html-webpack-plugin": "^5.5.0",
     "style-loader": "^3.3.1",

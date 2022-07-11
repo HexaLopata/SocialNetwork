@@ -7,7 +7,7 @@ export const AccountLoader = ({ children, fetchAccount, account, isAuthenticated
     useEffect(() => {
         if (isAuthenticated)
             fetchAccount()
-    }, [isAuthenticated])
+    }, [isAuthenticated, fetchAccount])
 
     if (!isAuthenticated)
         return (<>{children}</>)
