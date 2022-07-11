@@ -17,6 +17,7 @@
 
 .textInput:focus {
     border-color: var(--primary-accent-color);
+    outline: none;
 }
 
 .clear {
@@ -41,4 +42,18 @@
 
 .clear.transparent {
     display: none;
+}
+
+*:-webkit-autofill,
+*:-webkit-autofill:hover {
+    background-color: var(--secondary-color-hover);
+    background: var(--secondary-color-hover);
+    color: var(--primary-text-color);
+    border: 3px solid var(--primary-color);
+    outline: none;
+}
+
+*:-webkit-autofill:focus {
+    outline: none;
+    border-color: var(--primary-accent-color);
 }

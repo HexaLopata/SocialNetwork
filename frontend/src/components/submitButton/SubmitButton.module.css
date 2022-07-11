@@ -23,6 +23,7 @@
 
 .submitButton:focus-visible {
     border-color: var(--primary-accent-color);
+    outline: none;
 }
 
 .animating {
