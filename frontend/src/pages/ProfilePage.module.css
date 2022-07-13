@@ -34,3 +34,8 @@
     padding: 15px 30px;
     position: relative;
 }
+
+.uploadPostContainer {
+    width: 600px;
+    margin-top: 15px;
+}

@@ -58,7 +58,7 @@ class CurrentAccountPostsView(APIView):
     @try_except_decorator()
     def get(self, *args, **kwargs):
         account = acs.get_current_account(self.request)
-        serializer = PostWithAuthorSerializer(account.posts, many=True)
+        serializer = PostSerializer(account.posts, many=True)
         return Response(serializer.data) 
 
 

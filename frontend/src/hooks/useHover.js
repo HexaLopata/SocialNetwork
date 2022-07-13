@@ -4,8 +4,12 @@ export const useHover = () => {
     const [isHovering, setHovering] = useState(false)
     const ref = useRef()
 
-    const hover = () => { setHovering(true) }
-    const leaveHover = () => { setHovering(false) }
+    const hover = () => {
+        setHovering(true)
+    }
+    const leaveHover = () => {
+        setHovering(false)
+    }
 
     useEffect(() => {
         if (ref.current) {

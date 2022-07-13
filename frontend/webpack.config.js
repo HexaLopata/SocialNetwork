@@ -1,50 +1,50 @@
-const path = require("path");
+const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 
 module.exports = {
-    entry: "./src/index.js",
+    entry: './src/index.js',
     output: {
         path: path.resolve(__dirname, 'static/frontend'),
-        filename: "[hash].[name].js"
+        filename: '[hash].[name].js',
     },
     devtool: 'source-map',
-    resolve: { extensions: [".js", ".jsx"] },
+    resolve: { extensions: ['.js', '.jsx'] },
     optimization: {
         splitChunks: {
-            chunks: 'all'
-        }
+            chunks: 'all',
+        },
     },
     plugins: [
         new HtmlWebpackPlugin({
             template: './src/index.html',
-            publicPath: '/static/frontend/'
+            publicPath: '/static/frontend/',
         }),
-        new CleanWebpackPlugin()
+        new CleanWebpackPlugin(),
     ],
     module: {
         rules: [
             {
                 test: /\.(js|jsx)$/,
                 exclude: /node_modules/,
-                use: ["babel-loader"]
+                use: ['babel-loader'],
             },
             {
                 test: /\.css$/,
                 use: [
-                    "style-loader",
+                    'style-loader',
                     {
-                        loader: "css-loader",
-                        options: { modules: true }
-                    }
-                ]
+                        loader: 'css-loader',
+                        options: { modules: true },
+                    },
+                ],
             },
 
             // For newer versions of Webpack it should be
             {
                 test: /\.(jpe?g|png|gif|svg)$/i,
-                loader: 'file-loader'
-            }
-        ]
-    }
-};
+                loader: 'file-loader',
+            },
+        ],
+    },
+}

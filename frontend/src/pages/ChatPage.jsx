@@ -1,5 +1,5 @@
 import React from 'react'
-import Chat from '../components/chat/Chat'
+import Chat from '../components/appComponents/chat/Chat'
 import classes from './ChatPage.module.css'
 
 export default function ChatPage() {

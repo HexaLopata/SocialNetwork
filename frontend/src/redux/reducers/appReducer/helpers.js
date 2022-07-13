@@ -1,15 +1,23 @@
 import { setError, setIsFormUploading } from './actions'
 
-export const sendRequest = (dispatch, getAxiosResponse, then, catchError = () => {}) => {
+export const sendRequest = (
+    dispatch,
+    getAxiosResponse,
+    then,
+    catchError = () => {}
+) => {
     dispatch(setIsFormUploading(true))
-    getAxiosResponse().then((response) => {
-        then(response)
-    }).catch((error) => {
-        catchError(error)
-        handleError(error, dispatch)
-    }).finally(() => {
-        dispatch(setIsFormUploading(false))
-    })
+    getAxiosResponse()
+        .then((response) => {
+            then(response)
+        })
+        .catch((error) => {
+            catchError(error)
+            handleError(error, dispatch)
+        })
+        .finally(() => {
+            dispatch(setIsFormUploading(false))
+        })
 }
 
 const handleError = (error, dispatch) => {
@@ -30,5 +38,4 @@ const handleError = (error, dispatch) => {
         }
         dispatch(setError(errorMessage))
     }
-
 }

@@ -1,5 +1,5 @@
 import React from 'react'
-import ChatPreview from '../components/chatPreview/ChatPreview'
+import ChatPreview from '../components/appComponents/chatPreview/ChatPreview'
 import classes from './ChatSelectionPage.module.css'
 
 export default function ChatSelectionPage() {
