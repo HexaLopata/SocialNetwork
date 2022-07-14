@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { connect } from 'react-redux'
-import PostList from '../components/appComponents/postList/PostList'
-import { fetchFriendsPosts } from '../redux/reducers/postReducer/actions'
+import PostList from '../../components/appComponents/postList/PostList'
+import { fetchFriendsPosts } from '../../redux/reducers/postReducer/actions'
 import classes from './PostPage.module.css'
 
 function PostPage({ posts, fetchPosts }) {

@@ -1,12 +1,12 @@
 import React, { useEffect } from 'react'
-import Block from '../components/ui/block/Block'
-import SimpleButton from '../components/ui/simpleButton/SimpleButton'
+import Block from '../../components/ui/block/Block'
+import SimpleButton from '../../components/ui/simpleButton/SimpleButton'
 import classes from './ProfilePage.module.css'
 import { connect } from 'react-redux'
-import { fetchAccountPosts } from '../redux/reducers/postReducer/actions'
+import { fetchAccountPosts } from '../../redux/reducers/postReducer/actions'
 import { useNavigate } from 'react-router-dom'
-import UploadPostForm from '../components/appComponents/uploadPostForm/UploadPostForm'
-import OwnPostList from '../components/appComponents/ownPostList/OwnPostList'
+import UploadPostForm from '../../components/appComponents/uploadPostForm/UploadPostForm'
+import OwnPostList from '../../components/appComponents/ownPostList/OwnPostList'
 
 function ProfilePage({ account, fetchPosts, posts }) {
     const navigate = useNavigate()
@@ -19,6 +19,11 @@ function ProfilePage({ account, fetchPosts, posts }) {
 
     return (
         <div className={classes.profileContainer}>
+            <img
+                src={account.background_picture_source}
+                className={classes.backgroundImage}
+                alt=''
+            />
             <div className={classes.profileInfoContainer}>
                 <div>
                     <img

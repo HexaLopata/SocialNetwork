@@ -1,10 +1,10 @@
-import LoginPage from '../pages/LoginPage'
-import PostPage from '../pages/PostPage'
-import EditProfilePage from '../pages/EditProfilePage'
-import ChatPage from '../pages/ChatPage'
-import ChatSelectionPage from '../pages/ChatSelectionPage'
-import ProfilePage from '../pages/ProfilePage'
-import RegisterPage from '../pages/RegisterPage'
+import LoginPage from '../pages/loginPage/LoginPage'
+import PostPage from '../pages/postPage/PostPage'
+import EditProfilePage from '../pages/editProfilePage/EditProfilePage'
+import ChatPage from '../pages/chatPage/ChatPage'
+import ChatSelectionPage from '../pages/chatSelectionPage/ChatSelectionPage'
+import ProfilePage from '../pages/profilePage/ProfilePage'
+import RegisterPage from '../pages/registerPage/RegisterPage'
 
 export const publicRoutes = [
     { path: '/login', element: LoginPage, name: 'Логин' },
@@ -23,5 +23,9 @@ export const privateRoutes = [
     { path: '/chat/:id', element: ChatPage, name: 'Чат' },
     { path: '/messages', element: ChatSelectionPage, name: 'Сообщения' },
     { path: '/profile/:id', element: ProfilePage, name: 'Профиль' },
-    { path: '/editProfile', element: EditProfilePage, name: 'Редактирование профиля' }
+    {
+        path: '/editProfile',
+        element: EditProfilePage,
+        name: 'Редактирование профиля',
+    },
 ]

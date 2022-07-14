@@ -5,14 +5,14 @@ import classes from './FileInput.module.css'
 export default function FileInput({ variant, children, ...props }) {
     const fileInputRef = useRef(null)
 
-    const handleClick = (e) => {
+    const selectFile = (_) => {
         fileInputRef.current.click()
     }
 
     return (
         <>
             <div className={classes.buttonContainer}>
-                <SimpleButton variant={variant} onClick={handleClick} >
+                <SimpleButton variant={variant} onClick={selectFile} >
                     {children}
                 </SimpleButton>
             </div>

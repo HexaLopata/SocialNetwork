@@ -1,21 +1,23 @@
 import React, { useCallback, useState } from 'react'
-import Form from '../components/ui/form/Form'
-import TextInput from '../components/ui/textInput/TextInput'
-import SubmitButton from '../components/ui/submitButton/SubmitButton'
-import Block from '../components/ui/block/Block'
-import Text from '../components/ui/text/Text'
-import classes from './LoginPage.module.css'
+import Form from '../../components/ui/form/Form'
+import TextInput from '../../components/ui/textInput/TextInput'
+import SubmitButton from '../../components/ui/submitButton/SubmitButton'
+import Block from '../../components/ui/block/Block'
+import Text from '../../components/ui/text/Text'
+import classes from '../loginPage/LoginPage.module.css'
 import { connect } from 'react-redux'
-import { register } from '../redux/reducers/authReducer/actions'
-import { setError } from '../redux/reducers/appReducer/actions'
+import { register } from '../../redux/reducers/authReducer/actions'
+import { setError } from '../../redux/reducers/appReducer/actions'
+import useCSRF from '../../hooks/useCSRF'
 
-const RegisterPage = ({ register, csrf, showError }) => {
+const RegisterPage = ({ register, showError }) => {
     const [login, setLogin] = useState('')
     const [name, setName] = useState('')
     const [lastName, setLastName] = useState('')
     const [birthdate, setBirthdate] = useState('')
     const [password, setPassword] = useState('')
     const [rePassword, setRePassword] = useState('')
+    const csrf = useCSRF()
 
     const tryRegister = useCallback(
         (e) => {
@@ -39,7 +41,7 @@ const RegisterPage = ({ register, csrf, showError }) => {
 
     return (
         <div className={classes.pageContainer}>
-            <Block width='100%' height='100%' padding='25px'>
+            <Block height='calc(100vh - 60px)' padding='25px' width='100%'>
                 <h1>Social Network</h1>
                 <Text>
                     Lorem ipsum dolor sit amet consectetur adipisicing elit.
@@ -101,8 +103,6 @@ const RegisterPage = ({ register, csrf, showError }) => {
     )
 }
 
-const mapStateToProps = (state) => ({ csrf: state.auth.csrf })
-
 const mapDispatchToProps = (dispatch) => {
     return {
         register: (username, password, firstName, lastName, birthdate, csrf) =>
@@ -120,4 +120,4 @@ const mapDispatchToProps = (dispatch) => {
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(RegisterPage)
+export default connect(null, mapDispatchToProps)(RegisterPage)

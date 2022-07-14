@@ -2,4 +2,5 @@
     background-color: var(--secondary-color);
     border-bottom: 3px solid var(--primary-accent-color);
     border-radius: 15px;
+    overflow: hidden;
 }

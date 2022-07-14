@@ -1,5 +1,6 @@
 import React, { useCallback, useState } from 'react'
 import { connect } from 'react-redux'
+import useCSRF from '../../../hooks/useCSRF'
 import { useImage } from '../../../hooks/useImage'
 import { uploadPost } from '../../../redux/reducers/postReducer/actions'
 import FileInput from '../../ui/fileInput/FileInput'
@@ -8,9 +9,10 @@ import SubmitButton from '../../ui/submitButton/SubmitButton'
 import TextArea from '../../ui/textarea/TextArea'
 import classes from './UploadPostForm.module.css'
 
-function UploadPostForm({ uploadPost, csrf }) {
+function UploadPostForm({ uploadPost }) {
     const [body, setBody] = useState('')
     const [image, setImage, file] = useImage()
+    const csrf = useCSRF()
 
     const submitPost = useCallback(
         (e) => {
@@ -45,11 +47,6 @@ function UploadPostForm({ uploadPost, csrf }) {
         </Form>
     )
 }
-
-const mapStateToProps = (state) => ({
-    csrf: state.auth.csrf,
-})
-
 const mapDispatchToProps = (dispatch) => {
     return {
         uploadPost: (body, file, csrf) => {
@@ -58,4 +55,4 @@ const mapDispatchToProps = (dispatch) => {
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(UploadPostForm)
+export default connect(null, mapDispatchToProps)(UploadPostForm)

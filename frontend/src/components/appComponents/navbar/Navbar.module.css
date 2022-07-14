@@ -17,6 +17,12 @@
     border-right: 2px solid var(--primary-accent-color);
 } 
 
+.navbar > *:last-child {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+}
+
 .navbar:hover {
     width: 250px;
 }

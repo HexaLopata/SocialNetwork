@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react'
 
-export const useImage = () => {
-    const [imageSrc, setImageSrc] = useState('')
+export const useImage = (defaultImageSrc) => {
+    const [imageSrc, setImageSrc] = useState(defaultImageSrc)
     const [file, setFile] = useState(null)
 
     const setImage = useCallback((files) => {

@@ -1,7 +1,7 @@
 import FileService from '../../../services/FileService'
 import PostService from '../../../services/PostService'
 import { setError, setIsFormUploading } from '../appReducer/actions'
-import { sendRequest } from '../appReducer/helpers'
+import { sendRequest } from '../../helpers'
 
 export const SET_ACCOUNT_POSTS = 'SET_ACCOUNT_POSTS'
 export const SET_FRIENDS_POSTS = 'SET_FRIENDS_POSTS'

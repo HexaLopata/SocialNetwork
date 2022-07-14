@@ -8,8 +8,8 @@ import { checkIsAuthenticated } from './redux/reducers/authReducer/actions'
 import { useEffect, useMemo } from 'react'
 import AccountLoader from './components/appComponents/accountLoader/AccountLoader'
 import InfoModal from './components/appComponents/modal/infoModal/InfoModal'
-import PostPage from './pages/PostPage'
-import LoginPage from './pages/LoginPage'
+import PostPage from './pages/postPage/PostPage'
+import LoginPage from './pages/loginPage/LoginPage'
 
 function App({ isAuthenticated, isIniting, checkIsAuthenticated }) {
     useEffect(() => {

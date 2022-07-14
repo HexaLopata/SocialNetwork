@@ -1,4 +1,5 @@
-import { setError, setIsFormUploading } from './actions'
+import FileService from '../services/FileService'
+import { setError, setIsFormUploading } from './reducers/appReducer/actions'
 
 export const sendRequest = (
     dispatch,
@@ -38,4 +39,18 @@ const handleError = (error, dispatch) => {
         }
         dispatch(setError(errorMessage))
     }
+}
+
+export const uploadAllImages = (filesWithNames, csrf) => {
+    return Promise.all(
+        filesWithNames.map((f) => {
+            return new Promise((resolve, reject) => {
+                FileService.uploadImage(f.file, csrf).then((response) => {
+                    resolve({ name: f.name, id: response.data.id, source: response.data.source })
+                }).catch(error => {
+                    reject(error)
+                })
+            })
+        })
+    )
 }

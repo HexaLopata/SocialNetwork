@@ -1,5 +1,5 @@
 import AuthService from '../../../services/AuthService'
-import { sendRequest } from '../appReducer/helpers'
+import { sendRequest } from '../../helpers'
 import Cookies from 'universal-cookie'
 import { setIniting } from '../appReducer/actions'
 
