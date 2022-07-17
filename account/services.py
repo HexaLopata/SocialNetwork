@@ -4,9 +4,11 @@ from django.core.exceptions import ObjectDoesNotExist
 from account.models import Account
 from channels.db import database_sync_to_async
 
+
 class AccountService:
-    def get_account_by_id(self, id: int, queryset = None) -> Account:
-        if queryset is None: queryset = Account.objects.all()
+    def get_account_by_id(self, id: int, queryset=None) -> Account:
+        if queryset is None:
+            queryset = Account.objects.all()
         account: Account = queryset.get(id=id)
         return account
 
@@ -23,7 +25,7 @@ class AccountService:
     def get_current_account_async(self, scope) -> Account:
         return scope['user'].account
 
-    def send_friend_request(self, from_ : Account, to: Account):
+    def send_friend_request(self, from_: Account, to: Account):
         if from_.id == to.id:
             raise ValueError('You can`t send a request to yourself')
 
@@ -38,9 +40,10 @@ class AccountService:
             from_.friends.add(to)
         else:
             if from_.friend_requests.filter(to_account=to).first() is not None:
-                raise ValueError('You have already sent a request to this user')
+                raise ValueError(
+                    'You have already sent a request to this user')
 
-            from_.friend_requests.create( from_account=from_, to_account=to)
+            from_.friend_requests.create(from_account=from_, to_account=to)
 
     def delete_friend(self, account: Account, friend: Account):
         try:
@@ -50,4 +53,3 @@ class AccountService:
 
         account.friends.remove(friend)
         friend.friends.remove(account)
-        

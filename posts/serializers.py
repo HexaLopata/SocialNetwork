@@ -15,6 +15,7 @@ class PostWithAuthorSerializer(serializers.ModelSerializer):
     author_last_name = serializers.CharField(source='author.last_name')
     image_source = serializers.ImageField(source='image.source', read_only=True)
 
+
     class Meta:
         model = Post
         fields = ['id', 'author', 'body', 'image', 'image_source', 'date',

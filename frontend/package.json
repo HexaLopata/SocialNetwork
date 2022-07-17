@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "webpack --mode development && mv ./static/frontend/index.html ./templates/frontend/",
     "build": "webpack --mode production && mv ./static/frontend/index.html ./templates/frontend/",
-    "start": "npx eslint ./src && webpack --mode development && mv ./static/frontend/index.html ./templates/frontend/ && (python ../manage.py runserver || python3 ../manage.py runserver)"
+    "start": "npx eslint ./src && concurrently \"webpack --watch --mode development\" \"(python ../manage.py runserver || python3 ../manage.py runserver)\""
   },
   "keywords": [],
   "author": "",
@@ -15,15 +15,21 @@
     "@babel/core": "^7.16.7",
     "@babel/preset-env": "^7.16.8",
     "@babel/preset-react": "^7.16.7",
+    "@babel/preset-typescript": "^7.18.6",
+    "@types/react": "^18.0.15",
+    "@types/react-dom": "^18.0.6",
+    "@types/redux": "^3.6.0",
     "babel-loader": "^8.2.3",
     "babel-preset-react-app": "^10.0.1",
     "clean-webpack-plugin": "^4.0.0",
+    "concurrently": "^7.2.2",
     "css-loader": "^6.5.1",
     "eslint": "^8.19.0",
     "eslint-config-react-app": "^7.0.1",
     "file-loader": "^6.2.0",
     "html-webpack-plugin": "^5.5.0",
     "style-loader": "^3.3.1",
+    "typescript": "^4.7.4",
     "webpack": "^5.65.0",
     "webpack-cli": "^4.9.1"
   },

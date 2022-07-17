@@ -16,7 +16,7 @@ class Account(models.Model):
 
     def delete(self, *args, **kwargs):
         self.profile_picture.delete()
-        self.background_image.delete()
+        self.background_picture.delete()
         super().delete(*args, **kwargs)
 
     def __str__(self):

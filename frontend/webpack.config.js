@@ -3,13 +3,13 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 
 module.exports = {
-    entry: './src/index.js',
+    entry: './src/index.tsx',
     output: {
         path: path.resolve(__dirname, 'static/frontend'),
         filename: '[hash].[name].js',
     },
     devtool: 'source-map',
-    resolve: { extensions: ['.js', '.jsx'] },
+    resolve: { extensions: ['.ts', '.tsx', '.js', '.jsx'] },
     optimization: {
         splitChunks: {
             chunks: 'all',
@@ -25,7 +25,7 @@ module.exports = {
     module: {
         rules: [
             {
-                test: /\.(js|jsx)$/,
+                test: /\.(js|jsx|ts|tsx)$/,
                 exclude: /node_modules/,
                 use: ['babel-loader'],
             },
@@ -39,8 +39,6 @@ module.exports = {
                     },
                 ],
             },
-
-            // For newer versions of Webpack it should be
             {
                 test: /\.(jpe?g|png|gif|svg)$/i,
                 loader: 'file-loader',

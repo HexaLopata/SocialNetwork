@@ -1,6 +1,8 @@
+from django.http import HttpRequest
 from rest_framework import generics, permissions
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework.request import Request
 from posts.services import PostService
 from .models import Post
 from .serializers import PostSerializer, PostWithAuthorSerializer
@@ -23,7 +25,7 @@ class PostView(generics.ListCreateAPIView):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
 
-    def create(self, request, *args, **kwargs):
+    def create(self, request: Request, *args, **kwargs):
         account = acs.get_current_account(self.request)
         self.request.data['author'] = account.pk
         return super().create(request, *args, **kwargs)
@@ -48,6 +50,7 @@ class AccountPostsView(generics.GenericAPIView):
     def get(self, *args, **kwargs):
         account = self.get_object()
         serializer = PostSerializer(account.posts, many=True)
+
         return Response(serializer.data)
 
 
