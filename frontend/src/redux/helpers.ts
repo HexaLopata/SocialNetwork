@@ -24,7 +24,7 @@ export const sendRequest = <T>(
         })
 }
 
-const handleError = (error: AxiosError, dispatch: AppDispatch) => {
+export const handleError = (error: AxiosError, dispatch: AppDispatch) => {
     if (!error.response || error.response.status === 500) {
         dispatch(setError('Ошибка сервера'))
     } else if (error.response.data['error']) {

@@ -28,7 +28,7 @@ const TextInput = React.memo<
                 {...props}
             />
             <div
-                className={clearButtonClasses()}
+                className={clearButtonClasses}
                 style={{ maskImage: `url(${deleteIcon})` }}
                 onClick={() => setValue('')}
             />

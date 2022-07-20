@@ -30,6 +30,34 @@ const postSlice = createSlice({
         addFriendsPosts: (state, action: PayloadAction<Post[]>) => {
             state.friendsPosts = state.friendsPosts.concat(action.payload)
         },
+
+        setLikePost: (state, action: PayloadAction<Post>) => {
+            let post = state.accountPosts.find(
+                (p) => (p.id == action.payload.id)
+            )
+            if (post) {
+                post.liked = true
+            } else {
+                post = state.friendsPosts.find(
+                    (p) => (p.id == action.payload.id)
+                )
+                if (post) post.liked = true
+            }
+        },
+
+        setCancelLikePost: (state, action: PayloadAction<Post>) => {
+            let post = state.accountPosts.find(
+                (p) => (p.id == action.payload.id)
+            )
+            if (post) {
+                post.liked = false
+            } else {
+                post = state.friendsPosts.find(
+                    (p) => (p.id == action.payload.id)
+                )
+                if (post) post.liked = false
+            }
+        },
     },
 })
 
@@ -38,6 +66,8 @@ export const {
     setFriendsPosts,
     addAccountPosts,
     addFriendsPosts,
+    setLikePost,
+    setCancelLikePost
 } = postSlice.actions
 
 export default postSlice.reducer

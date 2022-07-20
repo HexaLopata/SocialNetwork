@@ -10,6 +10,8 @@ urlpatterns = [
     path('posts/', PostView.as_view()),
     # accepts DELETE request and deletes post with given id
     path('posts/<int:pk>/', PostDeleteView.as_view()),
+    # accepts POST and DELETE requests to like or cancel like
+    path('posts/<int:pk>/likes/', RatePostView.as_view()),
     # accepts GET request for list all posts of all friends of the current account
     path('account/current/friends/posts/', FriendsPostsView.as_view()),
 ]

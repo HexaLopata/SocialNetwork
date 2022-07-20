@@ -12,13 +12,13 @@ const LikeButton: FC<LikeButtonProps & React.HTMLProps<HTMLButtonElement>> = ({
     liked = false,
     ...props
 }) => {
-    const buttonClasses = useMemo(() => {
+    const buttonClasses = useMemo((): string => {
         if (liked) return classes.likeButton + ' ' + classes.closed
         return classes.likeButton
     }, [liked])
 
     return (
-        <button className={buttonClasses()} {...props} type='button'>
+        <button className={buttonClasses} {...props} type='button'>
             <div
                 className={classes.heart}
                 style={{ maskImage: `url(${heartImage})` }}

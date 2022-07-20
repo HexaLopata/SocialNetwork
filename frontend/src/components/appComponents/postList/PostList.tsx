@@ -7,24 +7,13 @@ interface PostListProps extends Props {
     posts: PostType[]
 }
 
-const PostList = React.memo<PostListProps>(
-    function PostList({ posts }) {
+const PostList = React.memo<PostListProps>(function PostList({ posts }) {
     const reversedPosts = useMemo(() => [...posts].reverse(), [posts])
 
     return (
         <>
             {reversedPosts.map((post) => {
-                return (
-                    <Post
-                        authorName={
-                            post.author_first_name + ' ' + post.author_last_name
-                        }
-                        key={post.id}
-                        imageSrc={post.image_source}
-                        body={post.body}
-                        date={post.date}
-                    />
-                )
+                return <Post post={post} key={post.id} />
             })}
         </>
     )

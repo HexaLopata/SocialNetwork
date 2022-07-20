@@ -1,11 +1,11 @@
-from django.http import HttpRequest
+from django.shortcuts import get_object_or_404
 from rest_framework import generics, permissions
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.request import Request
 from posts.services import PostService
 from .models import Post
-from .serializers import PostSerializer, PostWithAuthorSerializer
+from .serializers import IdPostSerializer, PostSerializer, PostWithAuthorSerializer
 from helpers.decorators import try_except_decorator
 from account.permissions import IsOwner
 from account.models import Account
@@ -13,6 +13,7 @@ from account.services import AccountService
 
 acs = AccountService()
 ps = PostService()
+
 
 class PostView(generics.ListCreateAPIView):
     """
@@ -61,8 +62,12 @@ class CurrentAccountPostsView(APIView):
     @try_except_decorator()
     def get(self, *args, **kwargs):
         account = acs.get_current_account(self.request)
-        serializer = PostSerializer(account.posts, many=True)
-        return Response(serializer.data) 
+        posts = account.posts
+        liked_posts = ps.get_liked_posts(account, posts)
+        return Response({
+            'posts': PostSerializer(posts, many=True).data,
+            'liked_posts': IdPostSerializer(liked_posts, many=True).data
+        })
 
 
 class FriendsPostsView(APIView):
@@ -73,4 +78,27 @@ class FriendsPostsView(APIView):
     def get(self, *args, **kwargs):
         account = acs.get_current_account(self.request)
         posts = ps.get_posts_of_friends(account)
-        return Response(PostWithAuthorSerializer(posts, many=True).data)
+        liked_posts = ps.get_liked_posts(account, posts)
+        return Response({
+            'posts': PostWithAuthorSerializer(posts, many=True).data,
+            'liked_posts': IdPostSerializer(liked_posts, many=True).data
+        })
+
+class RatePostView(APIView):
+    """
+    Accepts POST and DELETE requests to like or cancel like
+    """
+    def get_post(self, pk: int):
+        return get_object_or_404(Post, id=pk)
+
+    def delete(self, *args, **kwargs):
+        self.account = acs.get_current_account(self.request)
+        post = self.get_post(kwargs['pk'])
+        post.likes.remove(self.account)
+        return Response(status=204)
+
+    def post(self, *args, **kwargs):
+        self.account = acs.get_current_account(self.request)
+        post = self.get_post(kwargs['pk'])
+        post.likes.add(self.account)
+        return Response(status=204)

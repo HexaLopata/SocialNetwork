@@ -6,4 +6,5 @@ export interface Post {
     id?: number
     author_first_name?: string
     author_last_name?: string
+    liked?: boolean
 }

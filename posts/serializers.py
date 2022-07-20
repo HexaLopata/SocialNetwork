@@ -20,3 +20,8 @@ class PostWithAuthorSerializer(serializers.ModelSerializer):
         model = Post
         fields = ['id', 'author', 'body', 'image', 'image_source', 'date',
                   'author_first_name', 'author_last_name']
+
+class IdPostSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Post
+        fields = ['id']
