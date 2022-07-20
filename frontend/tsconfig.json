@@ -4,7 +4,8 @@
     "module": "ESNext",                     
     "jsx": "react",                         
     "sourceMap": true,                      
-    "strict": false,                        
+    "strict": true,             
+    "moduleResolution": "node",   
     "esModuleInterop": true,                
     "forceConsistentCasingInFileNames": true
   }
