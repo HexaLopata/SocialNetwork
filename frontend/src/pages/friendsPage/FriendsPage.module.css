@@ -1,0 +1,12 @@
+.friendsPageContainer {
+    margin: 0 auto;
+    padding: 20px 0 20px 0;
+    max-width: 1200px;
+    display: flex;
+    flex-direction: row;
+    gap: 60px;
+}
+
+.friendsPageContainer > *:last-child {
+    width: 100%;
+}

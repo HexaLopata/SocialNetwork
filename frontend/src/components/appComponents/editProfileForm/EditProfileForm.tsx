@@ -72,7 +72,7 @@ const EditProfileForm: FC<EditProfileFormProps> = ({
                 height='200px'
                 width='200px'
                 margin='15px auto'
-                objectFit='contain'
+                objectFit='cover'
                 defaultImageSrc={account?.profile_picture_source}
             />
             <h2>Фото заднего фона: </h2>
@@ -81,6 +81,7 @@ const EditProfileForm: FC<EditProfileFormProps> = ({
                 height='200px'
                 width='350px'
                 margin='15px auto'
+                objectFit='cover'
                 defaultImageSrc={account?.background_picture_source}
             />
             <SubmitButton value='Сохранить' />

@@ -1,0 +1,29 @@
+.friendThumbnail:hover {
+    border-color: var(--primary-accent-color);
+}
+
+.friendThumbnail {
+    cursor: pointer;
+    transition: border-color 0.2s ease-in-out;
+    height: 110px;
+    padding: 20px;
+    border-radius: 15px;
+    border: 2px solid var(--primary-color);
+    background-color: var(--secondary-color-hover);
+}
+
+.friendThumbnailContainer {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
+
+.profilePicture {
+    display: block;
+    width: 70px;
+    height: 70px;
+    color: var(--contrast-text-color);
+    background-color: black;
+    border-radius: 15px;
+    object-fit: cover;
+}

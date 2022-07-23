@@ -21,10 +21,6 @@
     display: block;
     width: 200px;
     height: 200px;
-    margin: 0;
-    color: var(--contrast-text-color);
-    background-color: black;
-    border-radius: 25px;
     object-fit: cover;
 }
 

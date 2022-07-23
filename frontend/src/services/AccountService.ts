@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { Account } from '../types/Account'
+import { FriendRequest } from '../types/FriendRequest'
 import formatDate from '../utils/formatDate'
 
 export default class AccountService {
@@ -26,6 +27,41 @@ export default class AccountService {
             data.background_picture = backgroundPictureID
 
         return axios.patch('/api/account/current/', data, {
+            headers: { 'X-CSRFToken': csrf },
+        })
+    }
+
+    static fetchFriends() {
+        return axios.get<Account[]>('/api/account/current/friends/')
+    }
+
+    static fetchFriendRequests() {
+        return axios.get<FriendRequest[]>('/api/account/current/requests/')
+    }
+
+    static addFriend(friendId: number, csrf: string) {
+        return axios.post(
+            '/api/account/current/friends/',
+            { friend_account: friendId },
+            {
+                headers: { 'X-CSRFToken': csrf },
+            }
+        )
+    }
+
+    static deleteFriend(friendId: number, csrf: string) {
+        return axios.request({
+            method: 'DELETE',
+            url: '/api/account/current/friends/',
+            data: { friend_account: friendId },
+            headers: {
+                'X-CSRFToken': csrf,
+            },
+        })
+    }
+
+    static deleteFriendRequest(requestId: number, csrf: string) {
+        return axios.delete(`/api/requests/${requestId}/`, {
             headers: { 'X-CSRFToken': csrf },
         })
     }

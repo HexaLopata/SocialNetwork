@@ -1,13 +1,18 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { Account } from '../../../types/Account'
+import { FriendRequest } from '../../../types/FriendRequest'
 import { Image } from '../../../types/Image'
 
 interface AccountState {
     account: Account | null
+    friends: Account[]
+    friendRequests: FriendRequest[]
 }
 
 const initialState: AccountState = {
     account: null,
+    friends: [],
+    friendRequests: [],
 }
 
 const accountSlice = createSlice({
@@ -31,9 +36,49 @@ const accountSlice = createSlice({
                 state.account.profile_picture_source = action.payload.source
             }
         },
+
+        setFriends: (state, action: PayloadAction<Account[]>) => {
+            state.friends = action.payload
+        },
+
+        setRequests: (state, action: PayloadAction<FriendRequest[]>) => {
+            state.friendRequests = action.payload
+        },
+
+        deleteRequest: (state, action: PayloadAction<FriendRequest>) => {
+            const index = state.friendRequests.findIndex(
+                (a) => a.id === action.payload.id
+            )
+            if (index !== -1) state.friendRequests.splice(index, 1)
+        },
+
+        deleteFriend: (state, action: PayloadAction<Account>) => {
+            const index = state.friends.findIndex(
+                (a) => a.id === action.payload.id
+            )
+            if (index !== -1) state.friends.splice(index, 1)
+        },
+
+        addFriend: (state, action: PayloadAction<Account>) => {
+            state.friends.push(action.payload)
+        },
+
+        addRequest: (state, action: PayloadAction<FriendRequest>) => {
+            state.friendRequests.push(action.payload)
+        },
     },
 })
 
-export const { setAccount, setBackgroundPicture, setProfilePicture } = accountSlice.actions
+export const {
+    setAccount,
+    setBackgroundPicture,
+    setProfilePicture,
+    deleteRequest,
+    addFriend,
+    setRequests,
+    setFriends,
+    deleteFriend,
+    addRequest,
+} = accountSlice.actions
 
 export default accountSlice.reducer

@@ -2,11 +2,14 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import generics, permissions
 from .services import AccountService
-from .models import Account
-from .serializers import AccountSerializer
+from .models import Account, Request
+from .serializers import AccountSerializer, RequestFromAccountSerializer, RequestSerializer, RequestToAccountSerializer
+from .permissions import IsRequestParticipant
 from helpers.decorators import try_except_decorator
 
+
 account_service = AccountService()
+
 
 class CurrentAccountView(APIView):
     """ 
@@ -28,7 +31,8 @@ class CurrentAccountView(APIView):
     def patch(self, *args, **kwargs):
         data = self.request.data
         account = account_service.get_current_account(self.request)
-        serializer = AccountSerializer(instance=account, data=data, partial=True)
+        serializer = AccountSerializer(
+            instance=account, data=data, partial=True)
         if serializer.is_valid():
             serializer.save()
             return Response(status=204)
@@ -101,8 +105,38 @@ class CurrentAccountFriendsView(APIView):
             return Response({'friend_account': ['This account does not exist']}, status=404)
 
         try:
-            account_service.delete_friend(account_service.get_current_account(self.request), friend)
+            account_service.delete_friend(
+                account_service.get_current_account(self.request), friend)
         except Exception as e:
             return Response({'friend_account': [str(e)]}, status=400)
-            
+
         return Response(status=204)
+
+
+class FriendRequestView(APIView):
+    """
+    Accepts GET request and returns all friend requests sended to the current account
+    """
+
+    def get(self, *args, **kwargs):
+        account = account_service.get_current_account(self.request)
+        requests_to_account = account_service.get_friend_requests_to_account(
+            account
+        )
+        requests_from_account = account_service.get_friend_requests_from_account(
+            account
+        )
+        
+        return Response(
+            RequestToAccountSerializer(requests_from_account, many=True).data +
+            RequestFromAccountSerializer(requests_to_account, many=True).data
+        )
+
+
+class FriendRequestDetail(generics.DestroyAPIView):
+    """
+    Accepts DELETE request and deletes friends request with specified id if account have permission
+    """
+    queryset = Request.objects.all()
+    serializer_class = RequestSerializer
+    permission_classes = [IsRequestParticipant]

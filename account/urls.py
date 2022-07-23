@@ -13,4 +13,8 @@ urlpatterns = [
     path('account/current/friends/', CurrentAccountFriendsView.as_view()),
     # accepts GET request and returns all friends of the account with specified id
     path('account/<int:pk>/friends/', AccountFriendsView.as_view()),
+    # accepts GET request and returns all friend requests sended to the current account
+    path('account/current/requests/', FriendRequestView.as_view()),
+    # accepts DELETE request and deletes friends request with specified id if account have permission
+    path('requests/<int:pk>/', FriendRequestDetail.as_view())
 ]

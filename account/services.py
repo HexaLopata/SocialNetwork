@@ -1,8 +1,9 @@
 from django.http import HttpRequest
 from django.contrib.auth.models import AnonymousUser
 from django.core.exceptions import ObjectDoesNotExist
-from account.models import Account
+from account.models import Account, Request
 from channels.db import database_sync_to_async
+from django.db.models import Subquery
 
 
 class AccountService:
@@ -44,6 +45,14 @@ class AccountService:
                     'You have already sent a request to this user')
 
             from_.friend_requests.create(from_account=from_, to_account=to)
+
+    def get_friend_requests_to_account(self, account: Account):
+        return Request.objects.filter(
+            to_account=account.id)
+
+    def get_friend_requests_from_account(self, account: Account):
+        return Request.objects.filter(
+            from_account=account.id)
 
     def delete_friend(self, account: Account, friend: Account):
         try:

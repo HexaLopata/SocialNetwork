@@ -1,7 +1,16 @@
-import { setAccount, setProfilePicture, setBackgroundPicture } from '.'
+import {
+    setAccount,
+    setProfilePicture,
+    setBackgroundPicture,
+    addFriend,
+    setFriends,
+    setRequests,
+    deleteRequest,
+} from '.'
 import AccountService from '../../../services/AccountService'
-import { sendRequest } from '../../helpers'
-import { uploadAllImages } from '../../helpers'
+import { Account } from '../../../types/Account'
+import { FriendRequest } from '../../../types/FriendRequest'
+import { sendRequest, uploadAllImages } from '../../helpers'
 import { AppDispatch } from '../../store'
 
 export const fetchAccount = () => {
@@ -53,6 +62,45 @@ export const updateAccount = (
                         dispatch(setBackgroundPicture(backgroundPicture))
                 }
             )
+        })
+    }
+}
+
+export const acceptFriendRequest = (request: FriendRequest, csrf: string) => {
+    const friend = request.from_account as Account
+    return (dispatch: AppDispatch) => {
+        if (request.id) {
+            if (!friend || !friend.id) return
+            AccountService.addFriend(friend.id, csrf).then(() => {
+                dispatch(addFriend(friend))
+                dispatch(deleteRequest(request))
+            })
+        }
+    }
+}
+
+export const rejectFriendRequest = (request: FriendRequest, csrf: string) => {
+    return (dispatch: AppDispatch) => {
+        if (request.id) {
+            AccountService.deleteFriendRequest(request.id, csrf).then(() => {
+                dispatch(deleteRequest(request))
+            })
+        }
+    }
+}
+
+export const fetchFriends = () => {
+    return (dispatch: AppDispatch) => {
+        AccountService.fetchFriends().then((response) => {
+            dispatch(setFriends(response.data))
+        })
+    }
+}
+
+export const fetchFriendRequests = () => {
+    return (dispatch: AppDispatch) => {
+        AccountService.fetchFriendRequests().then((response) => {
+            dispatch(setRequests(response.data))
         })
     }
 }

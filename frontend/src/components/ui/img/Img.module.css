@@ -1,0 +1,5 @@
+.img {
+    display: block;
+    color: var(--contrast-text-color);
+    background-color: black;
+}

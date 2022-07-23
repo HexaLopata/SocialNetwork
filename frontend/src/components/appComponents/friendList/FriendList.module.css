@@ -1,0 +1,13 @@
+.friendListContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.noFriendsHeaderContainer {
+    text-align: center;
+}
+
+.headerContainer {
+    margin-bottom: 10px;
+}

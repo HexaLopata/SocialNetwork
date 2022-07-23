@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from file_api.serializers import ImageSerializer
-from .models import Account
+from .models import Account, Request
 
 
 class AccountSerializer(serializers.ModelSerializer):
@@ -24,3 +24,28 @@ class ThumbnailAccountSerializer(serializers.ModelSerializer):
         model = Account
         fields = ['id', 'first_name', 'last_name',
                   'birthdate', 'profile_picture', 'profile_picture_source']
+
+
+class RequestToAccountSerializer(serializers.ModelSerializer):
+    to_account = ThumbnailAccountSerializer()
+
+    class Meta:
+        model = Request
+        fields = ['id', 'from_account', 'to_account']
+
+
+class RequestFromAccountSerializer(serializers.ModelSerializer):
+    from_account = ThumbnailAccountSerializer()
+
+    class Meta:
+        model = Request
+        fields = ['id', 'from_account', 'to_account']
+
+
+class RequestSerializer(serializers.ModelSerializer):
+    from_account = ThumbnailAccountSerializer()
+    to_account = ThumbnailAccountSerializer()
+
+    class Meta:
+        model = Request
+        fields = ['id', 'from_account', 'to_account']

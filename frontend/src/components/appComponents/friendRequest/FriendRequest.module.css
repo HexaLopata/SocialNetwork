@@ -1,0 +1,12 @@
+.requestContainer {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    margin: 10px 0;
+}
+
+.infoContainer {
+    display: flex;
+    gap: 5px;
+    flex-direction: column;
+}

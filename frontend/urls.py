@@ -11,4 +11,5 @@ urlpatterns = [
     path('editProfile/', views.index),
     path('register/', views.index),
     path('chat/<int:pk>/', views.index),
+    path('friends/', views.index),
 ]
