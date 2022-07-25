@@ -1,4 +1,4 @@
-import React, { FC, useEffect } from 'react'
+import React, { FC, useEffect, useMemo } from 'react'
 import Block from '../../components/ui/block/Block'
 import SimpleButton, {
     SimpleButtonVariant,
@@ -13,7 +13,7 @@ import { RootState, TDispatch } from '../../redux/store'
 import { Props } from '../../types/Props'
 import { Account } from '../../types/Account'
 import { Post } from '../../types/Post'
-import { Img } from '../../components/ui/img/Img'
+import { ProfileInfo } from '../../components/appComponents/profileInfo/ProfileInfo'
 
 interface ProfilePageProps extends Props {
     account: Account | null
@@ -30,6 +30,10 @@ const ProfilePage: FC<ProfilePageProps> = ({ account, fetchPosts, posts }) => {
         fetchPosts()
     }, [fetchPosts])
 
+    const name = useMemo(() => {
+        return account?.first_name + ' ' + account?.last_name
+    }, [account])
+
     return (
         <div className={classes.profileContainer}>
             <img
@@ -37,35 +41,19 @@ const ProfilePage: FC<ProfilePageProps> = ({ account, fetchPosts, posts }) => {
                 className={classes.backgroundImage}
                 alt=''
             />
-            <div className={classes.profileInfoContainer}>
-                <div>
-                    <Img
-                        width='200px'
-                        height='200px'
-                        borderRadius='25px'
-                        src={account?.profile_picture_source}
-                        alt='Изображение'
-                    />
-                </div>
-
-                <Block className={classes.profileInfo}>
-                    <h1>{account?.first_name + ' ' + account?.last_name}</h1>
-                    <h4>Дата рождения: {account?.birthdate}</h4>
-                    <Link to={'/friends'}>Друзей: Много</Link>
-                    <SimpleButton
-                        onClick={navigateToEditProfilePage}
-                        variant={SimpleButtonVariant.dark}
-                        style={{
-                            padding: '10px 15px',
-                            position: 'absolute',
-                            bottom: '20px',
-                            right: '20px',
-                        }}
-                    >
-                        Редактировать
-                    </SimpleButton>
-                </Block>
-            </div>
+            <ProfileInfo
+                profilePictureSrc={account?.profile_picture_source}
+                name={name}
+                birthdate={account?.birthdate}
+                infoComponents={<Link to={'/friends'}>Друзей: Много</Link>}
+            >
+                <SimpleButton
+                    onClick={navigateToEditProfilePage}
+                    variant={SimpleButtonVariant.dark}
+                >
+                    Редактировать
+                </SimpleButton>
+            </ProfileInfo>
             <div className={classes.uploadPostContainer}>
                 <UploadPostForm />
             </div>

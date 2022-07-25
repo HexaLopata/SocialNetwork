@@ -26,7 +26,7 @@ class AccountService:
     def get_current_account_async(self, scope) -> Account:
         return scope['user'].account
 
-    def send_friend_request(self, from_: Account, to: Account):
+    def send_friend_request(self, from_: Account, to: Account) -> Request:
         if from_.id == to.id:
             raise ValueError('You can`t send a request to yourself')
 
@@ -39,12 +39,14 @@ class AccountService:
             to.friend_requests.filter(id=mutual_request.id).delete()
             to.friends.add(from_)
             from_.friends.add(to)
+            return None
         else:
             if from_.friend_requests.filter(to_account=to).first() is not None:
                 raise ValueError(
                     'You have already sent a request to this user')
 
-            from_.friend_requests.create(from_account=from_, to_account=to)
+            request = from_.friend_requests.create(from_account=from_, to_account=to)
+            return request
 
     def get_friend_requests_to_account(self, account: Account):
         return Request.objects.filter(

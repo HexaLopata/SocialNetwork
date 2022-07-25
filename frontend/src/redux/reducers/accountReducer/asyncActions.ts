@@ -6,6 +6,9 @@ import {
     setFriends,
     setRequests,
     deleteRequest,
+    setObservedAccount,
+    deleteFriend,
+    addRequest,
 } from '.'
 import AccountService from '../../../services/AccountService'
 import { Account } from '../../../types/Account'
@@ -17,6 +20,14 @@ export const fetchAccount = () => {
     return (dispatch: AppDispatch) => {
         AccountService.fetchAccount().then((response) => {
             dispatch(setAccount(response.data))
+        })
+    }
+}
+
+export const fetchAccountById = (id: number) => {
+    return (dispatch: AppDispatch) => {
+        AccountService.fetchAccountById(id).then((response) => {
+            dispatch(setObservedAccount(response.data))
         })
     }
 }
@@ -66,6 +77,23 @@ export const updateAccount = (
     }
 }
 
+export const sendFriendRequest = (account: Account, csrf: string) => {
+    return (dispatch: AppDispatch) => {
+        if (account.id) {
+            const id = account.id
+            sendRequest(
+                dispatch,
+                () => {
+                    return AccountService.addFriend(id, csrf)
+                },
+                (response) => {
+                    dispatch(addRequest(response.data))
+                }
+            )
+        }
+    }
+}
+
 export const acceptFriendRequest = (request: FriendRequest, csrf: string) => {
     const friend = request.from_account as Account
     return (dispatch: AppDispatch) => {
@@ -85,6 +113,23 @@ export const rejectFriendRequest = (request: FriendRequest, csrf: string) => {
             AccountService.deleteFriendRequest(request.id, csrf).then(() => {
                 dispatch(deleteRequest(request))
             })
+        }
+    }
+}
+
+export const removeFromFriendList = (friend: Account, csrf: string) => {
+    return (dispatch: AppDispatch) => {
+        if (friend.id) {
+            const id = friend.id
+            sendRequest(
+                dispatch,
+                () => {
+                    return AccountService.deleteFriend(id, csrf)
+                },
+                () => {
+                    dispatch(deleteFriend(friend))
+                }
+            )
         }
     }
 }

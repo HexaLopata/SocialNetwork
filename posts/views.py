@@ -15,6 +15,14 @@ acs = AccountService()
 ps = PostService()
 
 
+def get_posts_with_likes(liked_by_account: Account, posts, post_serializer):
+    liked_posts = ps.get_liked_posts(liked_by_account, posts)
+    return Response({
+        'posts': post_serializer(posts, many=True).data,
+        'liked_posts': IdPostSerializer(liked_posts, many=True).data
+    })
+
+
 class PostView(generics.ListCreateAPIView):
     """
     Accepts GET and POST requests for list or create posts.\n
@@ -50,9 +58,9 @@ class AccountPostsView(generics.GenericAPIView):
 
     def get(self, *args, **kwargs):
         account = self.get_object()
-        serializer = PostSerializer(account.posts, many=True)
-
-        return Response(serializer.data)
+        posts = account.posts
+        liked_by = acs.get_current_account(self.request)
+        return get_posts_with_likes(liked_by, posts, PostWithAuthorSerializer)
 
 
 class CurrentAccountPostsView(APIView):
@@ -63,11 +71,7 @@ class CurrentAccountPostsView(APIView):
     def get(self, *args, **kwargs):
         account = acs.get_current_account(self.request)
         posts = account.posts
-        liked_posts = ps.get_liked_posts(account, posts)
-        return Response({
-            'posts': PostSerializer(posts, many=True).data,
-            'liked_posts': IdPostSerializer(liked_posts, many=True).data
-        })
+        return get_posts_with_likes(account, posts, PostSerializer)
 
 
 class FriendsPostsView(APIView):
@@ -78,16 +82,14 @@ class FriendsPostsView(APIView):
     def get(self, *args, **kwargs):
         account = acs.get_current_account(self.request)
         posts = ps.get_posts_of_friends(account)
-        liked_posts = ps.get_liked_posts(account, posts)
-        return Response({
-            'posts': PostWithAuthorSerializer(posts, many=True).data,
-            'liked_posts': IdPostSerializer(liked_posts, many=True).data
-        })
+        return get_posts_with_likes(account, posts, PostWithAuthorSerializer)
+
 
 class RatePostView(APIView):
     """
     Accepts POST and DELETE requests to like or cancel like
     """
+
     def get_post(self, pk: int):
         return get_object_or_404(Post, id=pk)
 

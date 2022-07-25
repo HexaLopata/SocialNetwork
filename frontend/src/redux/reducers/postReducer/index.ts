@@ -1,14 +1,33 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { WritableDraft } from 'immer/dist/internal'
 import { Post } from '../../../types/Post'
 
 interface PostState {
     accountPosts: Post[]
     friendsPosts: Post[]
+    observedAccountPosts: Post[]
 }
 
 const initialState: PostState = {
     accountPosts: [],
     friendsPosts: [],
+    observedAccountPosts: [],
+}
+
+const setLike = (
+    state: WritableDraft<PostState>,
+    action: PayloadAction<Post>,
+    like: boolean
+) => {
+    const postLists = [
+        state.friendsPosts,
+        state.accountPosts,
+        state.observedAccountPosts,
+    ]
+    for (let i = 0; i < postLists.length; i++) {
+        const post = postLists[i].find((p) => p.id == action.payload.id)
+        if (post) post.liked = like
+    }
 }
 
 const postSlice = createSlice({
@@ -17,6 +36,10 @@ const postSlice = createSlice({
     reducers: {
         setAccountPosts: (state, action: PayloadAction<Post[]>) => {
             state.accountPosts = action.payload
+        },
+
+        setObservedAccountPosts: (state, action: PayloadAction<Post[]>) => {
+            state.observedAccountPosts = action.payload
         },
 
         setFriendsPosts: (state, action: PayloadAction<Post[]>) => {
@@ -32,31 +55,11 @@ const postSlice = createSlice({
         },
 
         setLikePost: (state, action: PayloadAction<Post>) => {
-            let post = state.accountPosts.find(
-                (p) => (p.id == action.payload.id)
-            )
-            if (post) {
-                post.liked = true
-            } else {
-                post = state.friendsPosts.find(
-                    (p) => (p.id == action.payload.id)
-                )
-                if (post) post.liked = true
-            }
+            setLike(state, action, true)
         },
 
         setCancelLikePost: (state, action: PayloadAction<Post>) => {
-            let post = state.accountPosts.find(
-                (p) => (p.id == action.payload.id)
-            )
-            if (post) {
-                post.liked = false
-            } else {
-                post = state.friendsPosts.find(
-                    (p) => (p.id == action.payload.id)
-                )
-                if (post) post.liked = false
-            }
+            setLike(state, action, false)
         },
     },
 })
@@ -67,7 +70,8 @@ export const {
     addAccountPosts,
     addFriendsPosts,
     setLikePost,
-    setCancelLikePost
+    setCancelLikePost,
+    setObservedAccountPosts,
 } = postSlice.actions
 
 export default postSlice.reducer

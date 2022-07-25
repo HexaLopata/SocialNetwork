@@ -91,9 +91,12 @@ class CurrentAccountFriendsView(APIView):
         except Account.DoesNotExist:
             return Response({'friend_account': ['This account does not exist']}, status=404)
         try:
-            account_service.send_friend_request(account, friend)
+            request = account_service.send_friend_request(account, friend)
         except Exception as e:
             return Response({'friend_account': [str(e)]}, status=400)
+            
+        if request is not None:
+            return Response(RequestToAccountSerializer(request).data, status=200)
         return Response(status=204)
 
     @try_except_decorator()
@@ -126,7 +129,7 @@ class FriendRequestView(APIView):
         requests_from_account = account_service.get_friend_requests_from_account(
             account
         )
-        
+
         return Response(
             RequestToAccountSerializer(requests_from_account, many=True).data +
             RequestFromAccountSerializer(requests_to_account, many=True).data

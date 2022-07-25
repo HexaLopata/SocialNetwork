@@ -8,6 +8,7 @@ import {
     setCancelLikePost,
     setFriendsPosts,
     setLikePost,
+    setObservedAccountPosts,
 } from '.'
 import { setError, setIsFormUploading } from '../appReducer'
 import { Post } from '../../../types/Post'
@@ -17,6 +18,15 @@ export const fetchAccountPosts = () => {
         sendRequest(dispatch, PostService.getOwnPosts, (response) => {
             const posts = setPostLikes(response.data)
             dispatch(setAccountPosts(posts))
+        })
+    }
+}
+
+export const fetchAccountPostsById = (id: number) => {
+    return (dispatch: AppDispatch) => {
+        sendRequest(dispatch, () => PostService.getAccountPostsById(id), (response) => {
+            const posts = setPostLikes(response.data)
+            dispatch(setObservedAccountPosts(posts))
         })
     }
 }

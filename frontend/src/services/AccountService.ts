@@ -5,7 +5,11 @@ import formatDate from '../utils/formatDate'
 
 export default class AccountService {
     static fetchAccount() {
-        return axios.get('/api/account/current/')
+        return axios.get<Account>('/api/account/current/')
+    }
+
+    static fetchAccountById(id: number) {
+        return axios.get<Account>(`/api/account/${id}/`)
     }
 
     static updateAccount(

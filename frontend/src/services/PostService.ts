@@ -3,13 +3,19 @@ import { Post } from '../types/Post'
 
 export default class PostService {
     static getFriendsPosts() {
-        return axios.get<{ posts: Post[]; liked_posts: {id: number}[] }>(
+        return axios.get<{ posts: Post[]; liked_posts: { id: number }[] }>(
             '/api/account/current/friends/posts/'
         )
     }
 
+    static getAccountPostsById(id: number) {
+        return axios.get<{ posts: Post[]; liked_posts: { id: number }[] }>(
+            `/api/account/${id}/posts/`
+        )
+    }
+
     static getOwnPosts() {
-        return axios.get<{ posts: Post[]; liked_posts: {id: number}[] }>(
+        return axios.get<{ posts: Post[]; liked_posts: { id: number }[] }>(
             '/api/account/current/posts/'
         )
     }

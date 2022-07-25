@@ -1,4 +1,5 @@
 import React, { FC } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { Account } from '../../../types/Account'
 import { Props } from '../../../types/Props'
 import { Img } from '../../ui/img/Img'
@@ -9,8 +10,10 @@ interface FriendThumbnailProps extends Props {
 }
 
 export const FriendThumbnail: FC<FriendThumbnailProps> = ({ account }) => {
+    const navigate = useNavigate()
+    
     return (
-        <div className={classes.friendThumbnail}>
+        <div className={classes.friendThumbnail} onClick={() => navigate(`/profile/${account.id}`)}>
             <div className={classes.friendThumbnailContainer}>
                 <Img
                     width='70px'

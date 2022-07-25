@@ -6,11 +6,12 @@ import ChatSelectionPage from '../pages/chatSelectionPage/ChatSelectionPage'
 import ProfilePage from '../pages/profilePage/ProfilePage'
 import RegisterPage from '../pages/registerPage/RegisterPage'
 import FriendsPage from '../pages/friendsPage/FriendsPage'
+import OtherProfilePage from '../pages/otherProfilePage/OtherProfilePage'
 
 export const publicRoutes = [
     { path: '/login', element: LoginPage, name: 'Логин' },
     { path: '/register', element: RegisterPage, name: 'Регистрация' },
-    { path: '/profile/:id', element: ProfilePage, name: 'Профиль' },
+    { path: '/profile/:id', element: OtherProfilePage, name: 'Профиль' },
 ]
 
 export const privateRoutes = [
@@ -23,7 +24,7 @@ export const privateRoutes = [
     },
     { path: '/chat/:id', element: ChatPage, name: 'Чат' },
     { path: '/messages', element: ChatSelectionPage, name: 'Сообщения' },
-    { path: '/profile/:id', element: ProfilePage, name: 'Профиль' },
+    { path: '/profile/:id', element: OtherProfilePage, name: 'Профиль' },
     { path: '/friends', element: FriendsPage, name: 'Список друзей' },
     {
         path: '/editProfile',

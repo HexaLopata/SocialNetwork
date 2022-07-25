@@ -7,12 +7,14 @@ interface AccountState {
     account: Account | null
     friends: Account[]
     friendRequests: FriendRequest[]
+    observedAccount: Account | null
 }
 
 const initialState: AccountState = {
     account: null,
     friends: [],
     friendRequests: [],
+    observedAccount: null,
 }
 
 const accountSlice = createSlice({
@@ -35,6 +37,10 @@ const accountSlice = createSlice({
                 state.account.profile_picture = action.payload.id
                 state.account.profile_picture_source = action.payload.source
             }
+        },
+
+        setObservedAccount: (state, action: PayloadAction<Account | null>) => {
+            state.observedAccount = action.payload
         },
 
         setFriends: (state, action: PayloadAction<Account[]>) => {
@@ -79,6 +85,7 @@ export const {
     setFriends,
     deleteFriend,
     addRequest,
+    setObservedAccount
 } = accountSlice.actions
 
 export default accountSlice.reducer
