@@ -58,7 +58,7 @@ class AccountPostsView(generics.GenericAPIView):
 
     def get(self, *args, **kwargs):
         account = self.get_object()
-        posts = account.posts
+        posts = account.posts.order_by('-date')
         liked_by = acs.get_current_account(self.request)
         return get_posts_with_likes(liked_by, posts, PostWithAuthorSerializer)
 
@@ -70,7 +70,7 @@ class CurrentAccountPostsView(APIView):
     @try_except_decorator()
     def get(self, *args, **kwargs):
         account = acs.get_current_account(self.request)
-        posts = account.posts
+        posts = account.posts.order_by('-date')
         return get_posts_with_likes(account, posts, PostSerializer)
 
 
@@ -81,7 +81,7 @@ class FriendsPostsView(APIView):
     @try_except_decorator()
     def get(self, *args, **kwargs):
         account = acs.get_current_account(self.request)
-        posts = ps.get_posts_of_friends(account)
+        posts = ps.get_posts_of_friends(account).order_by('-date')
         return get_posts_with_likes(account, posts, PostWithAuthorSerializer)
 
 

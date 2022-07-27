@@ -1,6 +1,7 @@
 from django.urls import path
-from .consumers import ChatConsumer
+from .consumers import GroupChatConsumer, PrivateChatConsumer
 
 ws_urlpatterns = [
-    path('chat/<int:chat_id>/', ChatConsumer.as_asgi())
+    path('chat/private/<int:chat_id>/', PrivateChatConsumer.as_asgi()),
+    path('chat/group/<int:chat_id>/', GroupChatConsumer.as_asgi())
 ]

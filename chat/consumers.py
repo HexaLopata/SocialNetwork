@@ -1,29 +1,26 @@
-from email.mime import image
 import json
 from channels.generic.websocket import AsyncWebsocketConsumer
-from channels.db import database_sync_to_async
 from account.models import Account
 from account.services import AccountService
-from .services import ChatService, MessageService
-from .models import Chat, Message
+from .services import GroupChatService, GroupMessageService, MessageService, PrivateChatService, PrivateMessageService
+from .models import  Chat, GroupChat, GroupMessage, Message
 from .custom_ws_codes import *
 
 
 class ChatConsumer(AsyncWebsocketConsumer):
     actions = ['add', 'edit', 'delete']
+    room_prefix = 'chat_'
 
     def __init__(self, *args, **kwargs):
-        self.cs = ChatService()
         self.as_ = AccountService()
-        self.ms = MessageService()
         super().__init__(*args, **kwargs)
 
     async def connect(self):
         self.chat_id = self.scope['url_route']['kwargs']['chat_id']
-        self.room_group_name = 'chat_%s' % self.chat_id
+        self.room_group_name = self.room_prefix + str(self.chat_id)
 
         try:
-            account: Account = await self.as_.get_current_account_async(self.scope)
+            self.account = await self.as_.get_current_account_async(self.scope)
         except:
             self.close(WS_UNAUTHORIZED)
 
@@ -32,7 +29,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         except Chat.DoesNotExist:
             self.close(WS_DOES_NOT_EXIST)
 
-        if not await self.cs.is_member_async(chat, account):
+        if not await self.cs.is_member_async(chat, self.account):
             self.close(WS_FORBIDDEN)
 
         await self.channel_layer.group_add(
@@ -51,6 +48,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
     async def receive(self, text_data):
         data = json.loads(text_data)
         action = data['action']
+        author = await self.as_.get_current_account_async(self.scope)
 
         if not action in self.actions:
             return
@@ -60,14 +58,15 @@ class ChatConsumer(AsyncWebsocketConsumer):
             {
                 'type': action + '_message',
                 'payload': data.get('payload'),
-                'id': data.get('id')
+                'id': data.get('id'),
+                'author': author
             }
         )
 
     async def add_message(self, event):
         message = event['payload']
 
-        author = await self.as_.get_current_account_async(self.scope)
+        author = event['author']
         message_obj = await self.ms.create_message_async(
             chat=self.chat_id,
             author=author,
@@ -80,19 +79,16 @@ class ChatConsumer(AsyncWebsocketConsumer):
             'action': 'add',
             'payload': {
                 'text': message_obj.body,
-                'image': str(message_obj.image)
+                'image': str(message_obj.image),
+                'author': author.id,
+                'date': str(message_obj.date)
             },
-            'author': {
-                'first_name': author.first_name,
-                'last_name': author.last_name,
-                'id': author.id
-            }
         }))
 
     async def edit_message(self, event):
         changes = event['payload']
         message_id = event['id']
-        author = await self.as_.get_current_account_async(self.scope)
+        author = event['author']
         if not await self.ms.is_owner_async(message_id, author):
             return
         try:
@@ -116,7 +112,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
     async def delete_message(self, event):
         message_id = event['id']
 
-        author = await self.as_.get_current_account_async(self.scope)
+        author = event['author']
         if not await self.ms.is_owner_async(message_id, author):
             return
 
@@ -131,3 +127,18 @@ class ChatConsumer(AsyncWebsocketConsumer):
             'id': message_id,
             'action': 'delete',
         }))
+
+
+class PrivateChatConsumer(ChatConsumer):
+    def __init__(self, *args, **kwargs):
+        self.cs = PrivateChatService()
+        self.ms = PrivateMessageService()
+        self.room_prefix = 'private_chat_'
+        super().__init__(*args, **kwargs)
+
+class GroupChatConsumer(ChatConsumer):
+    def __init__(self, *args, **kwargs):
+        self.cs = GroupChatService()
+        self.ms = GroupMessageService()
+        self.room_prefix = 'group_chat_'
+        super().__init__(*args, **kwargs)

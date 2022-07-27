@@ -4,7 +4,7 @@ import { Image as Image } from '../types/Image'
 import { setIsFormUploading, setError } from './reducers/appReducer'
 import { AppDispatch } from './store'
 
-export const sendRequest = <T>(
+export const sendForm = <T>(
     dispatch: AppDispatch,
     getAxiosResponse: () => Promise<AxiosResponse<T>>,
     then?: (response: AxiosResponse<T>) => void,

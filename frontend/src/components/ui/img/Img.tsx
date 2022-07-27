@@ -5,6 +5,8 @@ import classes from './Img.module.css'
 interface ImgProps extends Props {
     width?: string
     height?: string
+    maxWidth?: string
+    maxHeight?: string
     objectFit?: 'contain' | 'cover' | 'fill' | 'none' | 'scale-down' | undefined
     borderRadius?: string
 }
@@ -20,6 +22,8 @@ export const Img: FC<
     height,
     objectFit = 'cover',
     borderRadius = '15px',
+    maxWidth,
+    maxHeight,
     ...props
 }) => {
     return (
@@ -30,6 +34,8 @@ export const Img: FC<
                 height,
                 objectFit,
                 borderRadius,
+                maxWidth,
+                maxHeight,
             }}
             {...props}
         ></img>

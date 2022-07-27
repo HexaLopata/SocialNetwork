@@ -1,44 +1,38 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import generics, permissions
 from account.models import Account
-from account.permissions import IsMember
 from account.services import AccountService
-from .serializers import ChatNestedSerializer, ChatSerializer
-from .models import Chat
+from chat.services import PrivateChatService
+from .serializers import PrivateChatNestedSerializer, PrivateChatSerializer
 
 acs = AccountService()
+pcs = PrivateChatService()
 
-class ChatView(generics.CreateAPIView):
-    """ 
-    Accepts POST request for create chats.\n
-    Input data:
-    members: int array
+class PrivateChatDetailView(APIView):
     """
-    queryset = Chat.objects.all()
-    serializer_class = ChatSerializer
-
-    def create(self, request, *args, **kwargs):
-        account = acs.get_current_account(request)
-        self.request.data['members'].append(account.pk)
-        return super().create(request, *args, **kwargs)
-
-class GetDeleteChatView(generics.RetrieveDestroyAPIView):
+    Accepts GET requests for retrieave chat.
     """
-    Accepts GET and DELETE requests for retrieave or delete chat.
-    """
-    queryset = Chat.objects.all()
-    serializer_class = ChatNestedSerializer
-    lookup_field = 'pk'
-    permission_classes = [IsMember]
 
-class CurrentAccountChatsView(APIView):
+    def get(self, *args, **kwargs):
+        pk = kwargs['pk']
+        try:
+            account = acs.get_account_by_id(pk)
+        except Account.DoesNotExist:
+            return Response({'detail': 'Account with specified id does not exist'}, status=404)
+        account_2 = acs.get_current_account(self.request)
+        chat = pcs.get_chat_by_members(account.id, account_2.id)
+        if(chat is None):
+            chat = pcs.create_chat(account_2, account)
+
+        return Response(PrivateChatNestedSerializer(chat).data, status=200)
+
+
+class CurrentAccountPrivateChatsView(APIView):
     """ 
     Accepts GET request for list of all chats of current account 
     """
     def get(self, *args, **kwargs):
         account = acs.get_current_account(self.request)
-        account = acs.get_with_prefetched(account, 'chats')
-        chat_serializer = ChatSerializer(account.chats, many=True)
+        chats = account.created_private_chats.all() | account.joined_private_chats.all()
+        chat_serializer = PrivateChatSerializer(chats, many=True)
         return Response(chat_serializer.data, status=200)
-        

@@ -13,7 +13,7 @@ import {
 import AccountService from '../../../services/AccountService'
 import { Account } from '../../../types/Account'
 import { FriendRequest } from '../../../types/FriendRequest'
-import { sendRequest, uploadAllImages } from '../../helpers'
+import { sendForm, uploadAllImages } from '../../helpers'
 import { AppDispatch } from '../../store'
 
 export const fetchAccount = () => {
@@ -55,7 +55,7 @@ export const updateAccount = (
                 (f) => f.name === 'backgroundPicture'
             )
 
-            sendRequest(
+            sendForm(
                 dispatch,
                 () =>
                     AccountService.updateAccount(
@@ -81,7 +81,7 @@ export const sendFriendRequest = (account: Account, csrf: string) => {
     return (dispatch: AppDispatch) => {
         if (account.id) {
             const id = account.id
-            sendRequest(
+            sendForm(
                 dispatch,
                 () => {
                     return AccountService.addFriend(id, csrf)
@@ -121,7 +121,7 @@ export const removeFromFriendList = (friend: Account, csrf: string) => {
     return (dispatch: AppDispatch) => {
         if (friend.id) {
             const id = friend.id
-            sendRequest(
+            sendForm(
                 dispatch,
                 () => {
                     return AccountService.deleteFriend(id, csrf)

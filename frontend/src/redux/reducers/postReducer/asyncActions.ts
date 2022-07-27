@@ -1,6 +1,6 @@
 import FileService from '../../../services/FileService'
 import PostService from '../../../services/PostService'
-import { handleError, sendRequest } from '../../helpers'
+import { handleError, sendForm } from '../../helpers'
 import { AppDispatch } from '../../store'
 import {
     addAccountPosts,
@@ -15,7 +15,7 @@ import { Post } from '../../../types/Post'
 
 export const fetchAccountPosts = () => {
     return (dispatch: AppDispatch) => {
-        sendRequest(dispatch, PostService.getOwnPosts, (response) => {
+        sendForm(dispatch, PostService.getOwnPosts, (response) => {
             const posts = setPostLikes(response.data)
             dispatch(setAccountPosts(posts))
         })
@@ -24,7 +24,7 @@ export const fetchAccountPosts = () => {
 
 export const fetchAccountPostsById = (id: number) => {
     return (dispatch: AppDispatch) => {
-        sendRequest(dispatch, () => PostService.getAccountPostsById(id), (response) => {
+        sendForm(dispatch, () => PostService.getAccountPostsById(id), (response) => {
             const posts = setPostLikes(response.data)
             dispatch(setObservedAccountPosts(posts))
         })
@@ -69,7 +69,7 @@ const uploadPostWithImageID = (
     imageID: number | null,
     csrf: string
 ) => {
-    sendRequest<Post>(
+    sendForm<Post>(
         dispatch,
         () => PostService.uploadPost(body, imageID, csrf),
         (response) => {
@@ -88,7 +88,7 @@ const uploadPostWithoutImage = (
 
 export const fetchFriendsPosts = () => {
     return (dispatch: AppDispatch) => {
-        sendRequest(dispatch, PostService.getFriendsPosts, (response) => {
+        sendForm(dispatch, PostService.getFriendsPosts, (response) => {
             const posts = setPostLikes(response.data)
             dispatch(setFriendsPosts(posts))
         })

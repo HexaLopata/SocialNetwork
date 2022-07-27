@@ -7,6 +7,7 @@ import { TDispatch } from '../../../redux/store'
 import { Props } from '../../../types/Props'
 import FileInput from '../../ui/fileInput/FileInput'
 import Form from '../../ui/form/Form'
+import { Img } from '../../ui/img/Img'
 import { SimpleButtonVariant } from '../../ui/simpleButton/SimpleButton'
 import SubmitButton from '../../ui/submitButton/SubmitButton'
 import TextArea from '../../ui/textarea/TextArea'
@@ -36,10 +37,11 @@ const UploadPostForm: FC<UploadPostFormProps> = ({ uploadPost }) => {
             <TextArea height={'200px'} value={body} setValue={setBody} />
             <h4>Изображение поста</h4>
             <div className={classes.imageContainer}>
-                <img
+                <Img
                     onClick={() => setImage(null)}
                     className={classes.image}
                     src={image}
+                    maxWidth='500px'
                     alt=''
                 />
             </div>

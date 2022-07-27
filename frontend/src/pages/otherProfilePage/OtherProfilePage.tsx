@@ -9,6 +9,7 @@ import SimpleButton, {
 } from '../../components/ui/simpleButton/SimpleButton'
 import { setObservedAccount } from '../../redux/reducers/accountReducer'
 import { fetchAccountById } from '../../redux/reducers/accountReducer/asyncActions'
+import { setObservedAccountPosts } from '../../redux/reducers/postReducer'
 import { fetchAccountPostsById } from '../../redux/reducers/postReducer/asyncActions'
 import { RootState, TDispatch } from '../../redux/store'
 import { Account } from '../../types/Account'
@@ -23,6 +24,7 @@ interface OtherProfilePageProps extends Props {
     fetchPosts: (accountId: number) => void
     fetchAccount: (id: number) => void
     setObservedAccount: (account: Account | null) => void
+    setObservedAccountPosts: (posts: Post[]) => void
 }
 
 export const OtherProfilePage: FC<OtherProfilePageProps> = ({
@@ -32,6 +34,7 @@ export const OtherProfilePage: FC<OtherProfilePageProps> = ({
     fetchAccount,
     posts,
     setObservedAccount,
+    setObservedAccountPosts,
 }) => {
     const params = useParams()
     const navigate = useNavigate()
@@ -39,6 +42,7 @@ export const OtherProfilePage: FC<OtherProfilePageProps> = ({
     useEffect(() => {
         return () => {
             setObservedAccount(null)
+            setObservedAccountPosts([])
         }
     }, [])
 
@@ -113,6 +117,9 @@ const mapDispatchToProps = (dispatch: TDispatch) => {
 
         setObservedAccount: (account: Account | null) => {
             dispatch(setObservedAccount(account))
+        },
+        setObservedAccountPosts: (posts: Post[]) => {
+            dispatch(setObservedAccountPosts(posts))
         },
     }
 }

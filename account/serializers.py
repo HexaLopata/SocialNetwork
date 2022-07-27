@@ -26,6 +26,12 @@ class ThumbnailAccountSerializer(serializers.ModelSerializer):
                   'birthdate', 'profile_picture', 'profile_picture_source']
 
 
+class IdAccountSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Account
+        fields = ['id']
+
+
 class RequestToAccountSerializer(serializers.ModelSerializer):
     to_account = ThumbnailAccountSerializer()
 

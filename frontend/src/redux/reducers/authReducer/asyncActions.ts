@@ -1,5 +1,5 @@
 import AuthService from '../../../services/AuthService'
-import { sendRequest } from '../../helpers'
+import { sendForm } from '../../helpers'
 import Cookies from 'universal-cookie'
 import { AppDispatch } from '../../store'
 import { setIsAuth, setCSRF } from '.'
@@ -30,7 +30,7 @@ export const fetchCSRF = () => {
 
 export const login = (email: string, password: string, csrf: string) => {
     return (dispatch: AppDispatch) => {
-        sendRequest(
+        sendForm(
             dispatch,
             () => AuthService.login(email, password, csrf),
             () => {
@@ -50,7 +50,7 @@ export const register = (
     csrf: string
 ) => {
     return (dispatch: AppDispatch) => {
-        sendRequest(dispatch, () =>
+        sendForm(dispatch, () =>
             AuthService.register(
                 username,
                 password,
@@ -65,7 +65,7 @@ export const register = (
 
 export const logout = (csrf: string) => {
     return (dispatch: AppDispatch) => {
-        sendRequest(
+        sendForm(
             dispatch,
             () => AuthService.logout(csrf),
             () => {

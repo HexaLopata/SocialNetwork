@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React from 'react'
 import { Props } from '../../../types/Props'
 import Post from '../post/Post'
 import { Post as PostType } from '../../../types/Post'
@@ -8,11 +8,9 @@ interface PostListProps extends Props {
 }
 
 const PostList = React.memo<PostListProps>(function PostList({ posts }) {
-    const reversedPosts = useMemo(() => [...posts].reverse(), [posts])
-
     return (
         <>
-            {reversedPosts.map((post) => {
+            {posts.map((post) => {
                 return <Post post={post} key={post.id} />
             })}
         </>
