@@ -45,7 +45,7 @@ const ProfilePage: FC<ProfilePageProps> = ({ account, fetchPosts, posts }) => {
                 profilePictureSrc={account?.profile_picture_source}
                 name={name}
                 birthdate={account?.birthdate}
-                infoComponents={<Link to={'/friends'}>Друзей: Много</Link>}
+                infoComponents={<Link to={'/friends'}>Друзья</Link>}
             >
                 <SimpleButton
                     onClick={navigateToEditProfilePage}

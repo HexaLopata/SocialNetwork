@@ -91,7 +91,7 @@ class MessageService:
             self,
             message: Union[Chat, int],
             text: str = None,
-            image: int = None):
+            image: int = None) -> Message:
         if isinstance(message, Message):
             message = message
         else:
@@ -103,6 +103,7 @@ class MessageService:
             message.image = image
 
         message.save()
+        return message
 
     @database_sync_to_async
     def update_message_async(

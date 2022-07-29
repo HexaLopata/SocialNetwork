@@ -48,51 +48,47 @@ class ChatConsumer(AsyncWebsocketConsumer):
     async def receive(self, text_data):
         data = json.loads(text_data)
         action = data['action']
-        author = await self.as_.get_current_account_async(self.scope)
 
         if not action in self.actions:
             return
 
+        if action == 'add':
+            await self.add_message(data)
+        elif action == 'edit':
+            await self.edit_message(data)
+        else:
+            await self.delete_message(data)
+
+        
+
+    async def add_message(self, data):
+        payload = data['payload']
+        author = await self.as_.get_current_account_async(self.scope)
+        message_obj = await self.ms.create_message_async(
+            chat=self.chat_id,
+            author=author,
+            text=payload.get('text'),
+            image=payload.get('image')
+        )
+
         await self.channel_layer.group_send(
             self.room_group_name,
             {
-                'type': action + '_message',
-                'payload': data.get('payload'),
-                'id': data.get('id'),
+                'type': 'send_add_action',
+                'payload': message_obj,
+                'id': message_obj.id,
                 'author': author
             }
         )
 
-    async def add_message(self, event):
-        message = event['payload']
-
-        author = event['author']
-        message_obj = await self.ms.create_message_async(
-            chat=self.chat_id,
-            author=author,
-            text=message.get('text'),
-            image=message.get('image')
-        )
-
-        await self.send(text_data=json.dumps({
-            'id': message_obj.id,
-            'action': 'add',
-            'payload': {
-                'text': message_obj.body,
-                'image': str(message_obj.image),
-                'author': author.id,
-                'date': str(message_obj.date)
-            },
-        }))
-
-    async def edit_message(self, event):
-        changes = event['payload']
-        message_id = event['id']
-        author = event['author']
+    async def edit_message(self, data):
+        changes = data['payload']
+        message_id = data['id']
+        author = await self.as_.get_current_account_async(self.scope)
         if not await self.ms.is_owner_async(message_id, author):
             return
         try:
-            await self.ms.update_message_async(
+            message = await self.ms.update_message_async(
                 message_id,
                 changes.get('text'),
                 changes.get('image')
@@ -100,19 +96,19 @@ class ChatConsumer(AsyncWebsocketConsumer):
         except Message.DoesNotExist:
             return
 
-        await self.send(text_data=json.dumps({
-            'id': message_id,
-            'action': 'edit',
-            'payload': {
-                'text': changes.get('text'),
-                'image': changes.get('image')
-            },
-        }))
+        await self.channel_layer.group_send(
+            self.room_group_name,
+            {
+                'type': 'send_edit_action',
+                'payload': message,
+                'id': message_id,
+            }
+        )
 
-    async def delete_message(self, event):
-        message_id = event['id']
+    async def delete_message(self, data):
+        message_id = data['id']
 
-        author = event['author']
+        author = await self.as_.get_current_account_async(self.scope)
         if not await self.ms.is_owner_async(message_id, author):
             return
 
@@ -123,8 +119,46 @@ class ChatConsumer(AsyncWebsocketConsumer):
         except Message.DoesNotExist:
             return
 
+        await self.channel_layer.group_send(
+            self.room_group_name,
+            {
+                'type': 'send_delete_action',
+                'id': message_id,
+            }
+        )
+
+    async def send_add_action(self, event):
+        message = event['payload']
+
+        author = event['author']
         await self.send(text_data=json.dumps({
-            'id': message_id,
+            'id': message.id,
+            'action': 'add',
+            'payload': {
+                'text': message.body,
+                'image': str(message.image),
+                'author': author.id,
+                'date': str(message.date)
+            },
+        }))
+
+    async def send_edit_action(self, event):
+        message = event['payload']
+
+        await self.send(text_data=json.dumps({
+            'id': message.id,
+            'action': 'edit',
+            'payload': {
+                'text': message.body,
+                'image': message.image
+            },
+        }))
+
+    async def send_delete_action(self, event):
+        id = event['id']
+
+        await self.send(text_data=json.dumps({
+            'id': id,
             'action': 'delete',
         }))
 

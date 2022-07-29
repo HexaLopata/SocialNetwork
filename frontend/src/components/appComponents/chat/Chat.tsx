@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useMemo, useState } from 'react'
+import React, { FC, useEffect, useMemo, useRef, useState } from 'react'
 import Message from '../message/Message'
 import { Chat as ChatType, Message as MessageType } from '../../../types/Chat'
 import SendMessageButton from '../../ui/sendMessageButton/SendMessageButton'
@@ -9,13 +9,37 @@ import { WebSocketChat } from '../../../services/WebSocketChat'
 import { Account } from '../../../types/Account'
 import { RootState, TDispatch } from '../../../redux/store'
 import { connect } from 'react-redux'
-import { addRealTimeMessage } from '../../../redux/reducers/chatReducer'
+import {
+    addRealTimeMessage,
+    setRealTimeMessages,
+} from '../../../redux/reducers/chatReducer'
+import { Img } from '../../ui/img/Img'
 
 interface ChatProps extends Props {
     chat: ChatType
     account: Account | null
     addRealTimeMessage: (message: MessageType) => void
     realTimeMessages: MessageType[]
+    setRealTimeMessages: (messages: MessageType[]) => void
+}
+
+const createMessageComponent = (
+    message: MessageType,
+    account: Account | null,
+    otherAccount: Account | undefined
+) => {
+    const own = account?.id === message.author?.id
+    const author = own
+        ? account?.first_name + ' ' + account?.last_name
+        : otherAccount?.first_name + ' ' + otherAccount?.last_name
+    return (
+        <Message
+            own={own}
+            key={message.id}
+            body={message.body}
+            author={author}
+        />
+    )
 }
 
 const Chat: FC<ChatProps> = ({
@@ -23,18 +47,24 @@ const Chat: FC<ChatProps> = ({
     account,
     addRealTimeMessage,
     realTimeMessages,
+    setRealTimeMessages,
 }) => {
     const [text, setText] = useState('')
+    const chatDiv = useRef<HTMLDivElement>(null)
 
     useEffect(() => {
         if (chat) {
             WebSocketChat.establishConnection(chat, (message: MessageType) => {
                 addRealTimeMessage(message)
+                if (chatDiv.current) {
+                    chatDiv.current.scrollTop = chatDiv.current.scrollHeight
+                }
             })
         }
 
         return () => {
             WebSocketChat.disconnect()
+            setRealTimeMessages([])
         }
     }, [chat])
 
@@ -45,49 +75,24 @@ const Chat: FC<ChatProps> = ({
 
     return (
         <div className={classes.chat}>
-            <img
-                className={classes.chatImage}
-                src={otherAccount?.profile_picture_source}
-                alt='Изображение чата'
-            />
-
             <div className={classes.chatLabel}>
+                <Img
+                    src={otherAccount?.profile_picture_source}
+                    alt='Изображение чата'
+                    width='70px'
+                    height='70px'
+                />
                 <h3>Личные сообщения c {otherAccount?.first_name}</h3>
             </div>
-            {chat.messages?.map((m) => {
-                const own = account?.id === m.author?.id
-                return (
-                    <Message
-                        own={own}
-                        key={m.id}
-                        body={m.body}
-                        author={
-                            own
-                                ? account?.first_name + ' ' + account?.last_name
-                                : otherAccount?.first_name +
-                                  ' ' +
-                                  otherAccount?.last_name
-                        }
-                    />
-                )
-            })}
-            {realTimeMessages?.map((m) => {
-                const own = account?.id === m.author?.id
-                return (
-                    <Message
-                        own={own}
-                        key={m.id}
-                        body={m.body}
-                        author={
-                            own
-                                ? account?.first_name + ' ' + account?.last_name
-                                : otherAccount?.first_name +
-                                  ' ' +
-                                  otherAccount?.last_name
-                        }
-                    />
-                )
-            })}
+            <div ref={chatDiv} className={classes.messageSection}>
+                {chat.messages?.map((m) =>
+                    createMessageComponent(m, account, otherAccount)
+                )}
+                {realTimeMessages?.map((m) =>
+                    createMessageComponent(m, account, otherAccount)
+                )}
+            </div>
+
             <div className={classes.messageInputContainer}>
                 <TextInput
                     placeholder='Сообщение'
@@ -95,11 +100,14 @@ const Chat: FC<ChatProps> = ({
                     setValue={setText}
                 />
                 <SendMessageButton
-                    onClick={() =>
-                        WebSocketChat.sendMessage({
-                            body: text,
-                        })
-                    }
+                    onClick={() => {
+                        if (text.trim() !== '') {
+                            WebSocketChat.sendMessage({
+                                body: text,
+                            })
+                            setText('')
+                        }
+                    }}
                 />
             </div>
         </div>
@@ -115,6 +123,8 @@ const mapDispatchToProps = (dispatch: TDispatch) => {
     return {
         addRealTimeMessage: (message: MessageType) =>
             dispatch(addRealTimeMessage(message)),
+        setRealTimeMessages: (messages: MessageType[]) =>
+            dispatch(setRealTimeMessages(messages)),
     }
 }
 

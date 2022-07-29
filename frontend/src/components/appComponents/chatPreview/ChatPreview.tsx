@@ -6,22 +6,24 @@ interface ChatPreviewProps extends Props {
     chatPicture: string
     chatName: string
     lastMessage: string
+    onClick: () => void
 }
 
 const ChatPreview: FC<ChatPreviewProps> = ({
     chatPicture,
     chatName,
     lastMessage,
+    onClick
 }) => {
     return (
-        <div className={classes.chatPreview}>
+        <div onClick={onClick} className={classes.chatPreview}>
             <img
                 src={chatPicture}
                 alt='Изображение чата'
                 className={classes.chatPicture}
             />
             <div className={classes.chatNameContainer}>
-                <h2>{chatName}</h2>
+                <h3>{chatName}</h3>
                 <h4>{lastMessage}</h4>
             </div>
         </div>

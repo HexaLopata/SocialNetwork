@@ -27,7 +27,7 @@ const chatSlice = createSlice({
             state.groupChats = action.payload
         },
 
-        setCurrentChat(state, action: PayloadAction<Chat>) {
+        setCurrentChat(state, action: PayloadAction<Chat | null>) {
             state.currentChat = action.payload
         },
 
