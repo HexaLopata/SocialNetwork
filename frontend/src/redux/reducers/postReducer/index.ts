@@ -47,11 +47,11 @@ const postSlice = createSlice({
         },
 
         addAccountPosts: (state, action: PayloadAction<Post[]>) => {
-            state.accountPosts = state.accountPosts.concat(action.payload)
+            state.accountPosts = action.payload.concat(state.accountPosts)
         },
 
         addFriendsPosts: (state, action: PayloadAction<Post[]>) => {
-            state.friendsPosts = state.friendsPosts.concat(action.payload)
+            state.friendsPosts = action.payload.concat(state.friendsPosts)
         },
 
         setLikePost: (state, action: PayloadAction<Post>) => {
