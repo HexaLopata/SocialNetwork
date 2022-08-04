@@ -11,9 +11,10 @@ import {
     addRequest,
 } from '.'
 import AccountService from '../../../services/AccountService'
+import FileService from '../../../services/FileService'
 import { Account } from '../../../types/Account'
 import { FriendRequest } from '../../../types/FriendRequest'
-import { sendForm, uploadAllImages } from '../../helpers'
+import { sendForm } from '../../helpers'
 import { AppDispatch } from '../../store'
 
 export const fetchAccount = () => {
@@ -41,7 +42,7 @@ export const updateAccount = (
     csrf: string
 ) => {
     return (dispatch: AppDispatch) => {
-        uploadAllImages(
+        FileService.uploadAllImages(
             [
                 { name: 'profilePicture', file: profilePictureFile },
                 { name: 'backgroundPicture', file: backgroundPictureFile },

@@ -14,6 +14,10 @@ import {
     setRealTimeMessages,
 } from '../../../redux/reducers/chatReducer'
 import { Img } from '../../ui/img/Img'
+import useCSRF from '../../../hooks/useCSRF'
+import { PinImageButton } from '../../ui/pinImageButton/PinImageButton'
+import { useImage } from '../../../hooks/useImage'
+import defaultImage from '../../../global/default-profile-icon.jpg'
 
 interface ChatProps extends Props {
     chat: ChatType
@@ -36,6 +40,7 @@ const createMessageComponent = (
         <Message
             own={own}
             key={message.id}
+            imageSrc={message.image_source}
             body={message.body}
             author={author}
         />
@@ -49,16 +54,49 @@ const Chat: FC<ChatProps> = ({
     realTimeMessages,
     setRealTimeMessages,
 }) => {
+    const fileInputRef = useRef<HTMLInputElement>(null)
     const [text, setText] = useState('')
     const chatDiv = useRef<HTMLDivElement>(null)
+    const csrf = useCSRF()
+    const [src, setImage, image] = useImage('')
+
+    const selectFile = () => {
+        fileInputRef.current?.click()
+    }
+
+    const updateInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.files) {
+            setImage(e.target.files)
+        }
+    }
+
+    const sendMessage = (e: React.FormEvent) => {
+        e.preventDefault()
+        if (text.trim() !== '' || image) {
+            WebSocketChat.sendMessage(
+                {
+                    body: text,
+                },
+                csrf,
+                image || undefined
+            )
+            setText('')
+            setImage(null)
+        }
+    }
+
+    const scrollDown = () => {
+        if (chatDiv.current) {
+            chatDiv.current.scrollTop = chatDiv.current.scrollHeight
+        }
+    }
 
     useEffect(() => {
+        scrollDown()
         if (chat) {
             WebSocketChat.establishConnection(chat, (message: MessageType) => {
                 addRealTimeMessage(message)
-                if (chatDiv.current) {
-                    chatDiv.current.scrollTop = chatDiv.current.scrollHeight
-                }
+                scrollDown()
             })
         }
 
@@ -77,7 +115,7 @@ const Chat: FC<ChatProps> = ({
         <div className={classes.chat}>
             <div className={classes.chatLabel}>
                 <Img
-                    src={otherAccount?.profile_picture_source}
+                    src={otherAccount?.profile_picture_source || defaultImage}
                     alt='Изображение чата'
                     width='70px'
                     height='70px'
@@ -93,23 +131,30 @@ const Chat: FC<ChatProps> = ({
                 )}
             </div>
 
-            <div className={classes.messageInputContainer}>
+            <form
+                onSubmit={sendMessage}
+                className={classes.messageInputContainer}
+            >
+                <div
+                    onClick={() => setImage(null)}
+                    className={classes.imageContainer}
+                >
+                    <Img maxWidth='150px' maxHeight='150px' src={src} />
+                </div>
+                <input
+                    type='file'
+                    className={classes.fileInput}
+                    onChange={updateInput}
+                    ref={fileInputRef}
+                />
                 <TextInput
                     placeholder='Сообщение'
                     value={text}
                     setValue={setText}
                 />
-                <SendMessageButton
-                    onClick={() => {
-                        if (text.trim() !== '') {
-                            WebSocketChat.sendMessage({
-                                body: text,
-                            })
-                            setText('')
-                        }
-                    }}
-                />
-            </div>
+                <PinImageButton onClick={selectFile} />
+                <SendMessageButton type='submit' />
+            </form>
         </div>
     )
 }

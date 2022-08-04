@@ -12,6 +12,7 @@ import { Props } from '../../../types/Props'
 import { Img } from '../../ui/img/Img'
 import SimpleButton, { SimpleButtonVariant } from '../../ui/simpleButton/SimpleButton'
 import classes from './FriendRequest.module.css'
+import defaultImage from '../../../global/default-profile-icon.jpg'
 
 interface FriendRequestProps extends Props {
     request: FriendRequestType
@@ -38,7 +39,7 @@ export const FriendRequest: FC<FriendRequestProps> = ({
     return (
         <div className={classes.requestContainer}>
             <Img
-                src={account?.profile_picture_source}
+                src={account?.profile_picture_source || defaultImage}
                 width='70px'
                 height='70px'
             />

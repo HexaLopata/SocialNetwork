@@ -1,14 +1,14 @@
 import React, { FC } from 'react'
-import arrowImage from './arrow-right-svgrepo-com.svg'
 import RoundButton from '../roundButton/RoundButton'
+import imageSvg from './paper-clip-svgrepo-com.svg'
 
-const SendMessageButton: FC<
+export const PinImageButton: FC<
     React.DetailedHTMLProps<
         React.ButtonHTMLAttributes<HTMLButtonElement>,
         HTMLButtonElement
     >
 > = ({ ...props }) => {
-    return <RoundButton maskImageSrc={arrowImage} {...props} />
+    return (
+        <RoundButton maskImageSrc={imageSvg} maskSize='30px 30px' {...props} />
+    )
 }
-
-export default SendMessageButton

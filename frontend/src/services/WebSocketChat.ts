@@ -1,5 +1,6 @@
 import { Account } from '../types/Account'
 import { Chat, Message } from '../types/Chat'
+import FileService from './FileService'
 
 interface ActionData {
     id: number
@@ -9,6 +10,7 @@ interface ActionData {
         image?: number
         author?: number
         date?: string
+        image_source?: string
     }
 }
 
@@ -36,17 +38,23 @@ export class WebSocketChat {
         WebSocketChat._webSocket.onmessage = this._onMessage
     }
 
-    static sendMessage(message: Message) {
-        WebSocketChat._webSocket.send(
-            JSON.stringify({
-                id: message.id,
-                action: 'add',
-                payload: {
-                    text: message.body,
-                    image: message.image,
-                },
-            })
-        )
+    static sendMessage(message: Message, csrf: string, image?: File) {
+        FileService.uploadAllImages(
+            [{ file: image || null, name: 'image' }].filter((f) => f.file),
+            csrf
+        ).then((files) => {
+            const image = files.find(f => f.name == 'image')
+            WebSocketChat._webSocket.send(
+                JSON.stringify({
+                    id: message.id,
+                    action: 'add',
+                    payload: {
+                        text: message.body,
+                        image: image?.id,
+                    },
+                })
+            )
+        })
     }
 
     static updateMessage(message: Message) {
@@ -71,10 +79,9 @@ export class WebSocketChat {
         )
     }
 
-
     static disconnect() {
         console.log('trying disconnect')
-        
+
         WebSocketChat._webSocket.close()
     }
 
@@ -110,6 +117,7 @@ export class WebSocketChat {
             date: data.payload?.date || '',
             author: { id: data.payload?.author } as Account,
             image: data.payload?.image,
+            image_source: data.payload?.image_source
         }
     }
 }

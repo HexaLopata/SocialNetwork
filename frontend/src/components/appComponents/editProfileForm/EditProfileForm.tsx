@@ -9,6 +9,8 @@ import useCSRF from '../../../hooks/useCSRF'
 import { Props } from '../../../types/Props'
 import { Account } from '../../../types/Account'
 import { TDispatch } from '../../../redux/store'
+import defaultImage from '../../../global/default-profile-icon.jpg'
+import defaultBackground from '../../../global/no-image.png'
 
 interface EditProfileFormProps extends Props {
     account: Account | null
@@ -73,7 +75,7 @@ const EditProfileForm: FC<EditProfileFormProps> = ({
                 width='200px'
                 margin='15px auto'
                 objectFit='cover'
-                defaultImageSrc={account?.profile_picture_source}
+                defaultImageSrc={account?.profile_picture_source || defaultImage}
             />
             <h2>Фото заднего фона: </h2>
             <ImageInput
@@ -82,7 +84,7 @@ const EditProfileForm: FC<EditProfileFormProps> = ({
                 width='350px'
                 margin='15px auto'
                 objectFit='cover'
-                defaultImageSrc={account?.background_picture_source}
+                defaultImageSrc={account?.background_picture_source || defaultBackground}
             />
             <SubmitButton value='Сохранить' />
         </Form>

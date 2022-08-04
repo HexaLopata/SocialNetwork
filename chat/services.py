@@ -151,7 +151,7 @@ class PrivateMessageService(MessageService):
         return PrivateMessage.objects.all()
 
     def get_message_by_id(self, id: int) -> Message:
-        return PrivateMessage.objects.get(id=id)
+        return PrivateMessage.objects.select_related('image').get(id=id)
 
     def get_created_message(self, author_id: int, chat_id: int, image: int, body: str) -> Message:
         return PrivateMessage.objects.create(

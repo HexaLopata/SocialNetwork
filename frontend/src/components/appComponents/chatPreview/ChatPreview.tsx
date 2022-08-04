@@ -1,6 +1,7 @@
 import React, { FC } from 'react'
 import { Props } from '../../../types/Props'
 import classes from './ChatPreview.module.css'
+import defaultImage from '../../../global/default-profile-icon.jpg'
 
 interface ChatPreviewProps extends Props {
     chatPicture: string
@@ -18,7 +19,7 @@ const ChatPreview: FC<ChatPreviewProps> = ({
     return (
         <div onClick={onClick} className={classes.chatPreview}>
             <img
-                src={chatPicture}
+                src={chatPicture || defaultImage}
                 alt='Изображение чата'
                 className={classes.chatPicture}
             />

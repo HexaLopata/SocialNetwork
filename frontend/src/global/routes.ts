@@ -11,7 +11,6 @@ import OtherProfilePage from '../pages/otherProfilePage/OtherProfilePage'
 export const publicRoutes = [
     { path: '/login', element: LoginPage, name: 'Логин' },
     { path: '/register', element: RegisterPage, name: 'Регистрация' },
-    { path: '/profile/:id', element: OtherProfilePage, name: 'Профиль' },
 ]
 
 export const privateRoutes = [

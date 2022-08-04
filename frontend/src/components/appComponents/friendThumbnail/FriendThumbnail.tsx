@@ -4,6 +4,7 @@ import { Account } from '../../../types/Account'
 import { Props } from '../../../types/Props'
 import { Img } from '../../ui/img/Img'
 import classes from './FriendThumbnail.module.css'
+import defaultImage from '../../../global/default-profile-icon.jpg'
 
 interface FriendThumbnailProps extends Props {
     account: Account
@@ -18,7 +19,7 @@ export const FriendThumbnail: FC<FriendThumbnailProps> = ({ account }) => {
                 <Img
                     width='70px'
                     height='70px'
-                    src={account.profile_picture_source}
+                    src={account.profile_picture_source || defaultImage}
                     alt='Аватар'
                 />
                 <div>

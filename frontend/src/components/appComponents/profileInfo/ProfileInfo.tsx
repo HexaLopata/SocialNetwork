@@ -3,6 +3,7 @@ import { Props } from '../../../types/Props'
 import Block from '../../ui/block/Block'
 import { Img } from '../../ui/img/Img'
 import classes from './ProfileInfo.module.css'
+import defaultImage from '../../../global/default-profile-icon.jpg'
 
 interface ProfileInfoProps extends Props {
     name?: string
@@ -25,7 +26,7 @@ export const ProfileInfo: FC<ProfileInfoProps> = ({
                     width='200px'
                     height='200px'
                     borderRadius='25px'
-                    src={profilePictureSrc}
+                    src={profilePictureSrc || defaultImage}
                     alt='Изображение'
                 />
             </div>

@@ -44,32 +44,4 @@ export const handleError = (error: AxiosError, dispatch: AppDispatch) => {
     }
 }
 
-interface NamedImage extends Image {
-    name: string
-}
 
-interface NamedFile {
-    name: string
-    file: File | null
-}
-
-export const uploadAllImages = (filesWithNames: NamedFile[], csrf: string) => {
-    return Promise.all(
-        filesWithNames.map((f) => {
-            return new Promise<NamedImage>((resolve, reject) => {
-                FileService.uploadImage(f.file, csrf)
-                    .then((response) => {
-                        const image = {
-                            id: response.data.id,
-                            source: response.data.source,
-                        }
-                        const name = f.name
-                        resolve({ name, ...image })
-                    })
-                    .catch((error) => {
-                        reject(error)
-                    })
-            })
-        })
-    )
-}
