@@ -1,0 +1,40 @@
+.fileInput {
+    display: none;
+}
+
+.imageContainer {
+    position: absolute;
+    left: 0;
+    bottom: 100px;
+    cursor: pointer;
+}
+
+.imageContainer::after {
+    content: '';
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    background-color: black;
+    opacity: 0;
+    position: absolute;
+    transition: opacity 0.1s ease-in-out;
+    border-radius: 15px;
+}
+
+.imageContainer:hover::after {
+    opacity: 0.5;
+}
+
+.messageInputContainer {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    column-gap: 10px;
+    height: 100px;
+    position: relative;
+}
+
+.messageInputContainer > input {
+    font-size: 30px;
+}

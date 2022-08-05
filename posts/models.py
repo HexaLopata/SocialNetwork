@@ -6,7 +6,7 @@ from file_api.models import Image
 class Post(models.Model):
     author = models.ForeignKey(
         Account, on_delete=models.CASCADE, related_name='posts')
-    date = models.DateField(auto_now=True)
+    date = models.DateTimeField(auto_now_add=True)
     image = models.OneToOneField(
         Image, on_delete=models.SET_NULL, blank=True, null=True)
     body = models.TextField()

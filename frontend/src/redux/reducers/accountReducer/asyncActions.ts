@@ -9,6 +9,7 @@ import {
     setObservedAccount,
     deleteFriend,
     addRequest,
+    updateAccount as updateAccountState
 } from '.'
 import AccountService from '../../../services/AccountService'
 import FileService from '../../../services/FileService'
@@ -68,6 +69,7 @@ export const updateAccount = (
                         csrf
                     ),
                 () => {
+                    dispatch(updateAccountState({first_name: firstName, last_name: lastName, birthdate}))
                     if (profilePicture)
                         dispatch(setProfilePicture(profilePicture))
                     if (backgroundPicture)

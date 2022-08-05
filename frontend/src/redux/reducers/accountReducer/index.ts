@@ -25,6 +25,10 @@ const accountSlice = createSlice({
             state.account = action.payload
         },
 
+        updateAccount: (state, action: PayloadAction<Account>) => {
+            state.account = { ...state.account, ...action.payload }
+        },
+
         setBackgroundPicture: (state, action: PayloadAction<Image>) => {
             if (state.account) {
                 state.account.background_picture = action.payload.id
@@ -77,6 +81,7 @@ const accountSlice = createSlice({
 
 export const {
     setAccount,
+    updateAccount,
     setBackgroundPicture,
     setProfilePicture,
     deleteRequest,

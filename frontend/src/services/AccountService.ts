@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { Account } from '../types/Account'
 import { FriendRequest } from '../types/FriendRequest'
-import formatDate from '../utils/formatDate'
+import { formatDateToServerFormat } from '../utils/formatDate'
 
 export default class AccountService {
     static fetchAccount() {
@@ -23,7 +23,7 @@ export default class AccountService {
         const data: Account = {
             first_name: firstName,
             last_name: lastName,
-            birthdate: formatDate(birthdate),
+            birthdate: formatDateToServerFormat(birthdate),
         }
 
         if (profilePictureID !== null) data.profile_picture = profilePictureID

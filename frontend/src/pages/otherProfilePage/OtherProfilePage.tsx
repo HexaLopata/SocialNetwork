@@ -1,6 +1,7 @@
 import React, { FC, useEffect, useMemo } from 'react'
 import { connect } from 'react-redux'
 import { useNavigate, useParams } from 'react-router-dom'
+import { BackgroundImage } from '../../components/appComponents/backgroundImage/BackgroundImage'
 import ManageFriendButton from '../../components/appComponents/manageFriendButton/ManageFriendButton'
 import PostList from '../../components/appComponents/postList/PostList'
 import { ProfileInfo } from '../../components/appComponents/profileInfo/ProfileInfo'
@@ -68,10 +69,8 @@ export const OtherProfilePage: FC<OtherProfilePageProps> = ({
         <>
             {observedAccount ? (
                 <div className={classes.profileContainer}>
-                    <img
+                    <BackgroundImage
                         src={observedAccount?.background_picture_source}
-                        className={classes.backgroundImage}
-                        alt=''
                     />
                     <ProfileInfo
                         profilePictureSrc={

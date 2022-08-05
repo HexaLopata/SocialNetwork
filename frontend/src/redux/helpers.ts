@@ -1,6 +1,4 @@
 import { AxiosError, AxiosResponse } from 'axios'
-import FileService from '../services/FileService'
-import { Image as Image } from '../types/Image'
 import { setIsFormUploading, setError } from './reducers/appReducer'
 import { AppDispatch } from './store'
 

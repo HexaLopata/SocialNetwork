@@ -4,6 +4,7 @@ import Block from '../../ui/block/Block'
 import { Img } from '../../ui/img/Img'
 import classes from './ProfileInfo.module.css'
 import defaultImage from '../../../global/default-profile-icon.jpg'
+import { formatDateToClientFormat } from '../../../utils/formatDate'
 
 interface ProfileInfoProps extends Props {
     name?: string
@@ -32,7 +33,7 @@ export const ProfileInfo: FC<ProfileInfoProps> = ({
             </div>
             <Block className={classes.profileInfo}>
                 <h1>{name}</h1>
-                <h4>Дата рождения: {birthdate}</h4>
+                <h4>Дата рождения: {birthdate && formatDateToClientFormat(birthdate)}</h4>
                 {infoComponents}
                 <div className={classes.buttonsContainer}>{children}</div>
             </Block>

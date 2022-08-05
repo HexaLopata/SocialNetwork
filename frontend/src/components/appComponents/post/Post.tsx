@@ -8,6 +8,7 @@ import {
 import { TDispatch } from '../../../redux/store'
 import { Post as PostType } from '../../../types/Post'
 import { Props } from '../../../types/Props'
+import { formatDateToClientFormat } from '../../../utils/formatDate'
 import LikeButton from '../../ui/likeButton/LikeButton'
 import Text from '../../ui/text/Text'
 import classes from './Post.module.css'
@@ -51,7 +52,7 @@ const Post: FC<PostProps> = ({ post, like, cancelLike }) => {
                     Оценить
                 </LikeButton>
 
-                <h2 className={classes.postDate}>{post.date}</h2>
+                <h2 className={classes.postDate}>{post.date && formatDateToClientFormat(post.date)}</h2>
             </div>
         </div>
     )

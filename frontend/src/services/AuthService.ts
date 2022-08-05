@@ -1,5 +1,5 @@
 import axios from 'axios'
-import formatDate from '../utils/formatDate'
+import { formatDateToServerFormat } from '../utils/formatDate'
 
 export default class AuthService {
     static checkIsAuthenticated() {
@@ -32,7 +32,7 @@ export default class AuthService {
                 password: password,
                 first_name: firstName,
                 last_name: lastName,
-                birthdate: formatDate(birthdate),
+                birthdate: formatDateToServerFormat(birthdate),
             },
             { headers: { 'X-CSRFToken': csrf } }
         )

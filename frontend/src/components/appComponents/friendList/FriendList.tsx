@@ -26,7 +26,7 @@ export const FriendList: FC<FriendListProps> = ({ friends }) => {
                 </div>
             ) : (
                 <div className={classes.noFriendsHeaderContainer}>
-                    <h4>Вы пока ни с кем не дружите</h4>
+                    <h4>Вы пока ни с кем не дружите 🙃</h4>
                 </div>
             )}
         </div>

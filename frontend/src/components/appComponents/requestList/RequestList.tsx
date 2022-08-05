@@ -12,9 +12,9 @@ interface RequestListProps extends Props {
 export const RequestList: FC<RequestListProps> = ({ requests }) => {
     return (
         <>
-            <Centered>
+            <div className={classes.headerContainer}>
                 <h2>Запросы в друзья</h2>
-            </Centered>
+            </div>
             {requests.length > 0 ? (
                 <div className={classes.requestListContainer}>
                     {requests.map((r) => (
@@ -22,9 +22,9 @@ export const RequestList: FC<RequestListProps> = ({ requests }) => {
                     ))}
                 </div>
             ) : (
-              <Centered>
-                <h5>Ничего нет :(</h5>
-              </Centered>
+                <Centered>
+                    <h5>Ничего нет 🙃</h5>
+                </Centered>
             )}
         </>
     )

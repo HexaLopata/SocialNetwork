@@ -1,5 +1,4 @@
 import React, { FC, useEffect, useMemo } from 'react'
-import Block from '../../components/ui/block/Block'
 import SimpleButton, {
     SimpleButtonVariant,
 } from '../../components/ui/simpleButton/SimpleButton'
@@ -14,6 +13,7 @@ import { Props } from '../../types/Props'
 import { Account } from '../../types/Account'
 import { Post } from '../../types/Post'
 import { ProfileInfo } from '../../components/appComponents/profileInfo/ProfileInfo'
+import { BackgroundImage } from '../../components/appComponents/backgroundImage/BackgroundImage'
 
 interface ProfilePageProps extends Props {
     account: Account | null
@@ -36,11 +36,7 @@ const ProfilePage: FC<ProfilePageProps> = ({ account, fetchPosts, posts }) => {
 
     return (
         <div className={classes.profileContainer}>
-            <img
-                src={account?.background_picture_source}
-                className={classes.backgroundImage}
-                alt=''
-            />
+            <BackgroundImage src={account?.background_picture_source}/>
             <ProfileInfo
                 profilePictureSrc={account?.profile_picture_source}
                 name={name}

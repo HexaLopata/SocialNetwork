@@ -1,10 +1,12 @@
 import React, { FC, useCallback, useState } from 'react'
+import { Controller, useForm } from 'react-hook-form'
 import { connect } from 'react-redux'
 import useCSRF from '../../../hooks/useCSRF'
 import { useImage } from '../../../hooks/useImage'
 import { uploadPost } from '../../../redux/reducers/postReducer/asyncActions'
 import { TDispatch } from '../../../redux/store'
 import { Props } from '../../../types/Props'
+import { ErrorText } from '../../ui/errorText/ErrorText'
 import FileInput from '../../ui/fileInput/FileInput'
 import Form from '../../ui/form/Form'
 import { Img } from '../../ui/img/Img'
@@ -17,24 +19,49 @@ interface UploadPostFormProps extends Props {
     uploadPost: (body: string, file: File | null, csrf: string) => void
 }
 
+interface IFormInput {
+    body: string
+}
+
 const UploadPostForm: FC<UploadPostFormProps> = ({ uploadPost }) => {
-    const [body, setBody] = useState('')
+    const {
+        control,
+        handleSubmit,
+        setValue,
+        formState: { errors },
+    } = useForm<IFormInput>()
     const [image, setImage, file] = useImage()
     const csrf = useCSRF()
 
-    const submitPost = useCallback(
-        (e: React.FormEvent<HTMLFormElement>) => {
-            e.preventDefault()
-            uploadPost(body, file, csrf)
-        },
-        [body, file, csrf, uploadPost]
-    )
+    const submitPost = (data: IFormInput) => {
+        uploadPost(data.body, file, csrf)
+        setValue('body', '')
+    }
 
     return (
-        <Form padding='15px 25px 25px 25px' onSubmit={submitPost}>
+        <Form
+            padding='15px 25px 25px 25px'
+            onSubmit={handleSubmit((data) => submitPost(data))}
+        >
             <h2>Опубликовать пост</h2>
             <h4>Содержимое поста</h4>
-            <TextArea height={'200px'} value={body} setValue={setBody} />
+            <Controller
+                name='body'
+                control={control}
+                rules={{
+                    required: 'Поле не должно быть пустым'
+                }}
+                render={({ field }) => {
+                    return (
+                        <TextArea
+                            height={'200px'}
+                            value={field.value}
+                            setValue={field.onChange}
+                        />
+                    )
+                }}
+            />
+            {errors.body && <ErrorText>{errors.body.message || 'Ошибка'}</ErrorText>}
             <h4>Изображение поста</h4>
             <div className={classes.imageContainer}>
                 <Img

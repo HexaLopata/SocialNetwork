@@ -1,8 +1,6 @@
-import React, { FC, useEffect, useMemo, useRef, useState } from 'react'
+import React, { FC, useEffect, useMemo, useRef } from 'react'
 import Message from '../message/Message'
 import { Chat as ChatType, Message as MessageType } from '../../../types/Chat'
-import SendMessageButton from '../../ui/sendMessageButton/SendMessageButton'
-import TextInput from '../../ui/textInput/TextInput'
 import classes from './Chat.module.css'
 import { Props } from '../../../types/Props'
 import { WebSocketChat } from '../../../services/WebSocketChat'
@@ -14,10 +12,8 @@ import {
     setRealTimeMessages,
 } from '../../../redux/reducers/chatReducer'
 import { Img } from '../../ui/img/Img'
-import useCSRF from '../../../hooks/useCSRF'
-import { PinImageButton } from '../../ui/pinImageButton/PinImageButton'
-import { useImage } from '../../../hooks/useImage'
 import defaultImage from '../../../global/default-profile-icon.jpg'
+import { SendMessageForm } from '../sendMessageForm/SendMessageForm'
 
 interface ChatProps extends Props {
     chat: ChatType
@@ -54,36 +50,7 @@ const Chat: FC<ChatProps> = ({
     realTimeMessages,
     setRealTimeMessages,
 }) => {
-    const fileInputRef = useRef<HTMLInputElement>(null)
-    const [text, setText] = useState('')
     const chatDiv = useRef<HTMLDivElement>(null)
-    const csrf = useCSRF()
-    const [src, setImage, image] = useImage('')
-
-    const selectFile = () => {
-        fileInputRef.current?.click()
-    }
-
-    const updateInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-        if (e.target.files) {
-            setImage(e.target.files)
-        }
-    }
-
-    const sendMessage = (e: React.FormEvent) => {
-        e.preventDefault()
-        if (text.trim() !== '' || image) {
-            WebSocketChat.sendMessage(
-                {
-                    body: text,
-                },
-                csrf,
-                image || undefined
-            )
-            setText('')
-            setImage(null)
-        }
-    }
 
     const scrollDown = () => {
         if (chatDiv.current) {
@@ -130,31 +97,7 @@ const Chat: FC<ChatProps> = ({
                     createMessageComponent(m, account, otherAccount)
                 )}
             </div>
-
-            <form
-                onSubmit={sendMessage}
-                className={classes.messageInputContainer}
-            >
-                <div
-                    onClick={() => setImage(null)}
-                    className={classes.imageContainer}
-                >
-                    <Img maxWidth='150px' maxHeight='150px' src={src} />
-                </div>
-                <input
-                    type='file'
-                    className={classes.fileInput}
-                    onChange={updateInput}
-                    ref={fileInputRef}
-                />
-                <TextInput
-                    placeholder='Сообщение'
-                    value={text}
-                    setValue={setText}
-                />
-                <PinImageButton onClick={selectFile} />
-                <SendMessageButton type='submit' />
-            </form>
+            <SendMessageForm />
         </div>
     )
 }
